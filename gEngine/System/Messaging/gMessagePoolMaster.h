@@ -20,7 +20,7 @@ namespace GENG
 
 		public:
 			gMessagePoolMaster() { DBGINIT; };
-			~gMessagePoolMaster() { DBGDEST; };
+			~gMessagePoolMaster() { m_pools.clear(); DBGDEST; };
 
 			static gMessagePoolMaster * Get()
 			{

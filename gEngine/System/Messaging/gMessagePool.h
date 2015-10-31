@@ -21,6 +21,7 @@ namespace GENG
 		template<typename MsgType>
 		struct gMessage
 		{
+			bool bCalledFromUpdate = false;
 			gMessenger<MsgType> *sender = nullptr;
 			MsgType data;
 		};
@@ -47,6 +48,7 @@ namespace GENG
 			std::recursive_mutex m_poolMutex;
 
 			std::vector<gMessage<MsgType>> m_messages;
+			std::vector<gMessage<MsgType>> m_midUpdateMessages;
 
 			std::vector<gMessenger<MsgType> *> m_messagers;
 			std::vector<gListener<MsgType> *> m_listeners;
@@ -76,13 +78,17 @@ namespace GENG
 					}
 				}
 				m_messages.clear();
+				std::swap(m_messages, m_midUpdateMessages);
 			}
 
 			void AddMessage(const gMessage<MsgType> & message)
 			{
 				std::lock_guard<std::recursive_mutex> guard(m_poolMutex);
 
-				m_messages.push_back(message);
+				if (!message.bCalledFromUpdate)
+					m_messages.push_back(message);
+				else
+					m_midUpdateMessages.push_back(message);
 			}
 			void AddMessager(gMessenger<MsgType> * messager)
 			{

@@ -25,11 +25,27 @@ public:
 		GENG_DBG("Received double message: " << msg.data);
 	}
 };
+class ComplexListenerClass : public GENG::Messaging::gListener<int>, public GENG::Messaging::gMessenger<double>
+{
+public:
+	using GENG::Messaging::gMessenger<double>::Post;
+	
+	virtual void RunMessage(GENG::Messaging::gMessage<int> msg)
+	{
+		GENG_DBG("Received int message: " << msg.data);
+		GENG::Messaging::gMessage<double> newMsg;
+		newMsg.bCalledFromUpdate = true;
+		newMsg.data = static_cast<double>(msg.data) * 2.52;
+		Post(newMsg);
+	}
+
+};
 
 int main(int argc, char* args[])
 {
 	PosterClass a;
 	ListenerClass b;
+	ComplexListenerClass c;
 
 	GENG::Messaging::gMessage<int> msgInt;
 	msgInt.data = 2;
@@ -38,6 +54,10 @@ int main(int argc, char* args[])
 	a.Post(msgInt);
 	a.Post(msgDbl);
 
+	GENG_DBG("-------------- Update 1 --------------");
+	GENG::Messaging::gMessagePoolMaster::Get()->UpdateAll();
+
+	GENG_DBG("-------------- Update 2 --------------");
 	GENG::Messaging::gMessagePoolMaster::Get()->UpdateAll();
 
 	return true;
