@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="gEngine">
+      <UniqueIdentifier>{9820b37a-8d7a-4db6-9859-3e766d713a2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gEngine\System">
+      <UniqueIdentifier>{57304895-cc1c-449f-8504-864a8974ed53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gEngine\System\Messaging">
+      <UniqueIdentifier>{808818ac-5e9d-47b5-be66-191c9ce9d72b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gEngine\System\Logging">
+      <UniqueIdentifier>{7769717c-4a5e-4efc-a3fd-b6d67844271d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\gEngine\System\Messaging\gMessagePool.h">
+      <Filter>gEngine\System\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Messaging\gMessenger.h">
+      <Filter>gEngine\System\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Messaging\gListener.h">
+      <Filter>gEngine\System\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Logging\gLogger.h">
+      <Filter>gEngine\System\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\Useful.h">
+      <Filter>gEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Messaging\gMessagePoolMaster.h">
+      <Filter>gEngine\System\Messaging</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
