@@ -71,7 +71,7 @@ namespace GENG
 };
 
 #define GENG_CLASSNAME std::string(typeid(this).name()).c_str()
-#define GENG_DBG(s) do { std::ostringstream os; os << __FUNCTION__ << " : " << s; GENG::Logging::DbgMsg(os.str()); } while(false)
-#define GENG_LOG(s) do { std::ostringstream os; os << __FUNCTION__ << " : " << s; GENG::Logging::LogMsg(os.str()); } while(false)
-#define DBGINIT GENG_DBG("Constructed")
-#define DBGDEST GENG_DBG("Destroyed")
+#define DBG(s) do { std::ostringstream os; os << __FUNCTION__ << " : " << s; GENG::Logging::DbgMsg(os.str()); } while(false)
+#define LOG(s) do { std::ostringstream os; os << __FUNCTION__ << " : " << s; GENG::Logging::LogMsg(os.str()); } while(false)
+#define DBGINIT DBG("Constructed")
+#define DBGDEST DBG("Destroyed")

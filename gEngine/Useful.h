@@ -6,6 +6,9 @@
 
 namespace GENG
 {
+#define GENG_EXIT_SUCCESS true;
+#define GENG_EXIT_FAILURE false;
+
 	template<typename T>
 	void _removeObjectFromVector(std::vector<T> &vec, T obj, bool bDelete = false)
 	{
