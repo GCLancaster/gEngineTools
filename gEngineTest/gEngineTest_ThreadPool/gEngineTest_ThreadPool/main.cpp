@@ -16,7 +16,7 @@ int main(int argc, char* args[])
 		int number;
 		int rand;
 	};
-	const int num = 500;
+	const int num = 150;
 	std::array<funcData, num> intArray;
 	std::string tName("ThreadName_");
 	for (int i = 0; i < intArray.size(); i++)
@@ -38,6 +38,8 @@ int main(int argc, char* args[])
 		}, &intArray[i]);
 	}
 	
+	m_threadPool->WaitToFinish();
+
 	for (int i = intArray.size() - 1; i >= 0 ; i--)
 	{
 		m_threadPool->AddTask(intArray[i].name, [&](void * data){

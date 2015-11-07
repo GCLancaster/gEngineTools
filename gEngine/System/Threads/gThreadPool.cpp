@@ -126,13 +126,17 @@ void GENG::Threads::gThreadPool::WaitToFinish()
 		tasksLeft = m_taskQueue.size();
 	}
 
+	std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+
 	while (tasksLeft > 0)
 	{
-		std::this_thread::sleep_for(std::chrono::seconds(10));
-
 		std::lock_guard<std::recursive_mutex> guard(m_taskMutex);
 		tasksLeft = m_taskQueue.size();
 	}
+
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+	auto time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	DBG("Finished waiting. Tasks took " << time.count() << "ms");
 }
 
 bool GENG::Threads::gThreadPool::_GetNextTask(std::shared_ptr<gWorkerTask> & task)
