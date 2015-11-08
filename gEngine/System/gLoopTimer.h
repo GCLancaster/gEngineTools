@@ -9,10 +9,7 @@ namespace GENG
 {
 	class gLoopTimer
 	{
-	public:
-		static uint32_t MAXFPS;
-		static uint32_t INTERNALFPS;
-		
+	public:		
 		struct InternalBlock
 		{
 			uint32_t m_internalFPS = 0;
@@ -46,28 +43,25 @@ namespace GENG
 		std::chrono::high_resolution_clock::duration m_minFrameTime;
 		std::chrono::high_resolution_clock::duration m_maxFrameTime;
 		uint32_t m_frameCounter = 0;
+		uint32_t m_maxFPS = 0;
 
 		bool m_bQuit = false;
 	public:
-		gLoopTimer() : 
-			m_minFrameTime(INT_MAX), 
-			m_maxFrameTime(INT_MIN)
-		{
-			// External Loop Max FPS
-			auto timeI = std::chrono::seconds(1) / static_cast<double>(MAXFPS / 2);
-			m_fTimerMaxDiff = std::chrono::duration_cast<std::chrono::high_resolution_clock::duration>(timeI);
-
-			//DBG(m_frameDelta.count() << " microseconds - Frame Delta", 1);
-			DBG(m_fTimerMaxDiff.count() << " microseconds - Max Frame Diff", 1);
-		}
-
+		gLoopTimer() {}
 		~gLoopTimer() {}
 
 		inline void init(
+			const uint32_t & maxFPS, 
 			const std::function<void()> & preLoopFunction,
 			const std::initializer_list<InternalBlock> & internaLoopFunctions,
 			const std::function<void()> & postLoopFunction)
 		{
+			m_maxFPS = maxFPS;
+
+			// External Loop Max FPS
+			auto timeI = std::chrono::seconds(1) / static_cast<double>(m_maxFPS / 2);
+			m_fTimerMaxDiff = std::chrono::duration_cast<std::chrono::high_resolution_clock::duration>(timeI);
+
 			m_preLoopFunction = std::move(preLoopFunction);
 			m_postLoopFunction = std::move(postLoopFunction);
 
@@ -132,9 +126,9 @@ namespace GENG
 				m_minFrameTime = min(m_minFrameTime, m_curFrameTime);
 				m_maxFrameTime = max(m_maxFrameTime, m_curFrameTime);
 
-				DBG("ExternalLoop: " << std::chrono::duration_cast<std::chrono::seconds>(getRunningTime()).count() << "s" << " " << m_frameCounter << "fps");
-				DBG("\tCur:" << std::chrono::duration_cast<std::chrono::milliseconds>(m_curFrameTime).count() << "ms"
-					<< "Avg:" << std::chrono::duration_cast<std::chrono::milliseconds>(m_avgFrameTime).count() << "ms"
+				DBG("ExternalLoop: " << std::chrono::duration_cast<std::chrono::seconds>(getRunningTime()).count() << "s" << " " << m_frameCounter << "fps"
+					<< " Cur:" << std::chrono::duration_cast<std::chrono::milliseconds>(m_curFrameTime).count() << "ms"
+					<< " Avg:" << std::chrono::duration_cast<std::chrono::milliseconds>(m_avgFrameTime).count() << "ms"
 					<< " Min:" << std::chrono::duration_cast<std::chrono::milliseconds>(m_minFrameTime).count() << "ms"
 					<< " Max:" << std::chrono::duration_cast<std::chrono::milliseconds>(m_maxFrameTime).count() << "ms");
 										
@@ -182,7 +176,4 @@ namespace GENG
 			m_fTimerEnd = m_fTimerStart;
 		};
 	};
-
-	__declspec(selectany) uint32_t gLoopTimer::MAXFPS = 30;
-	__declspec(selectany) uint32_t gLoopTimer::INTERNALFPS = 60;
 };
