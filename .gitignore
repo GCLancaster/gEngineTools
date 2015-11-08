@@ -1,0 +1,10 @@
+*.obj
+*.log
+*.pdb
+*.tlog
+*.sdf
+*.idb
+*.ilk
+*.suo
+*.opensdf
+*.lastcodeanalysissucceeded
