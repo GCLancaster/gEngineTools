@@ -172,7 +172,7 @@ namespace GENG
 				internal.m_totalTime += internal.m_frameDelta;
 				internal.m_frameAccum -= internal.m_frameDelta;
 
-				internal.m_internaLoopFunction();
+				internal.m_function();
 			}
 		};
 		inline void _endFrame(const std::function<void()> & postLoopFunction)
