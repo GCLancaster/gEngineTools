@@ -53,6 +53,7 @@ namespace GENG
 			auto c = out.str();
 			auto d = std::string(c);
 			OutputDebugString(d.c_str());
+			std::cout << d << std::endl;
 		};
 
 		static void LogMsg(const std::string & msg)

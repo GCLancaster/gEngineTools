@@ -10,17 +10,17 @@ int main(int argc, char* args[])
 	bool bQuit = false;
 
 	timer.init
-		(
+		(60,
 		[&]() -> void {
 			//DBG("Preloop");
 		},
 		{
 			GENG::gLoopTimer::InternalBlock(30, "InternalLoop 1", [&]() -> void {
-				std::this_thread::sleep_for(std::chrono::microseconds(rand() % 10));
+				//std::this_thread::sleep_for(std::chrono::microseconds(rand() % 10));
 				//DBG("Internal");
 			}),
 			GENG::gLoopTimer::InternalBlock(120, "InternalLoop 2", [&]() -> void {
-				std::this_thread::sleep_for(std::chrono::microseconds(rand() % 10));
+				//std::this_thread::sleep_for(std::chrono::microseconds(rand() % 10));
 				//DBG("Internal");
 			})
 		},

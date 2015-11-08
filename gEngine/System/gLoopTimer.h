@@ -46,6 +46,7 @@ namespace GENG
 		uint32_t m_maxFPS = 0;
 
 		bool m_bQuit = false;
+		bool m_bStabilised = false;
 	public:
 		gLoopTimer() {}
 		~gLoopTimer() {}
@@ -116,8 +117,11 @@ namespace GENG
 			m_curFrameTime = m_fTimerStart - m_fTimerEnd;
 			m_avgFrameTime += m_curFrameTime;
 
+			if (!m_bStabilised)			
+				m_bStabilised = (getRunningTime() > std::chrono::seconds(5));
+			
 			// Second counter + per-second debugging
-			if ((getRunningTime() > std::chrono::seconds(5)) && (m_fTimerStart > (m_fTimerSecondCount + std::chrono::seconds(1))))
+			if (m_bStabilised && (m_fTimerStart > (m_fTimerSecondCount + std::chrono::seconds(1))))
 			{
 				m_fTimerSecondCount = m_fTimerStart;
 
