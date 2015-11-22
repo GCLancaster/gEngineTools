@@ -76,3 +76,4 @@ namespace GENG
 #define LOG(s) do { std::ostringstream os; os << "[" << __LINE__ << "][" << __FUNCTION__ << "] : " << s; GENG::Logging::LogMsg(os.str()); } while(false)
 #define DBGINIT DBG("Constructed")
 #define DBGDEST DBG("Destroyed")
+#define DERROR(s) do { DBG(s); throw std::logic_error(s); } while(false)
