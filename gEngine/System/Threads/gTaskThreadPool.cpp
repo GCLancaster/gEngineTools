@@ -1,23 +1,23 @@
 
-#include "gThreadPool.h"
+#include "gTaskThreadPool.h"
 #include <algorithm>
 #include <xrefwrap>
 
-GENG::Threads::gThreadPool::gThreadPool()
+GENG::Threads::gTaskThreadPool::gTaskThreadPool()
 {
 }
 
-GENG::Threads::gThreadPool::gThreadPool(const int numThreads, const int maxNumThreads /*= -1*/)
+GENG::Threads::gTaskThreadPool::gTaskThreadPool(const int numThreads, const int maxNumThreads /*= -1*/)
 {
 	Init(numThreads, maxNumThreads);
 }
 
-GENG::Threads::gThreadPool::~gThreadPool()
+GENG::Threads::gTaskThreadPool::~gTaskThreadPool()
 {
 	Destroy();
 }
 
-void GENG::Threads::gThreadPool::Init(const int numThreads, const int maxNumThreads /*= -1*/)
+void GENG::Threads::gTaskThreadPool::Init(const int numThreads, const int maxNumThreads /*= -1*/)
 {
 	Destroy();
 
@@ -31,7 +31,7 @@ void GENG::Threads::gThreadPool::Init(const int numThreads, const int maxNumThre
 	LOG("Initalised NumThreads(" << m_numThreads << ") MaxThreads(" << m_maxThreads << ")");
 }
 
-void GENG::Threads::gThreadPool::Destroy()
+void GENG::Threads::gTaskThreadPool::Destroy()
 {
 	WaitToFinish();
 
@@ -42,7 +42,7 @@ void GENG::Threads::gThreadPool::Destroy()
 	ClearThreads();
 }
 
-bool GENG::Threads::gThreadPool::AddThread(const int numToAdd /*= 1*/)
+bool GENG::Threads::gTaskThreadPool::AddThread(const int numToAdd /*= 1*/)
 {
 	std::lock_guard<std::recursive_mutex> guard(m_poolMutex);
 
@@ -60,7 +60,7 @@ bool GENG::Threads::gThreadPool::AddThread(const int numToAdd /*= 1*/)
 	return GENG_EXIT_SUCCESS;
 }
 
-void GENG::Threads::gThreadPool::AddTask(const std::string & name, std::function<void(void *)> task, void * data)
+void GENG::Threads::gTaskThreadPool::AddTask(const std::string & name, std::function<void(void *)> task, void * data)
 {
 	bool bWorkerAvailable = false;
 
@@ -95,7 +95,7 @@ void GENG::Threads::gThreadPool::AddTask(const std::string & name, std::function
 	}
 }
 
-void GENG::Threads::gThreadPool::ClearThreads()
+void GENG::Threads::gTaskThreadPool::ClearThreads()
 {
 	std::lock_guard<std::recursive_mutex> guard(m_poolMutex);
 	
@@ -111,14 +111,14 @@ void GENG::Threads::gThreadPool::ClearThreads()
 	m_numThreads = 0;
 }
 
-void GENG::Threads::gThreadPool::ClearTaskQueue()
+void GENG::Threads::gTaskThreadPool::ClearTaskQueue()
 {
 	std::lock_guard<std::recursive_mutex> guard(m_taskMutex);
 	m_taskQueue.clear();
 	m_taskCond.notify_all();
 }
 
-void GENG::Threads::gThreadPool::WaitToFinish()
+void GENG::Threads::gTaskThreadPool::WaitToFinish()
 {
 	int tasksLeft = 0;
 	{
@@ -139,7 +139,7 @@ void GENG::Threads::gThreadPool::WaitToFinish()
 	DBG("Finished waiting. Tasks took " << time.count() << "ms");
 }
 
-bool GENG::Threads::gThreadPool::_GetNextTask(std::shared_ptr<gWorkerTask> & task)
+bool GENG::Threads::gTaskThreadPool::_GetNextTask(std::shared_ptr<gWorkerTask> & task)
 {
 	std::lock_guard<std::recursive_mutex> guard(m_taskMutex);
 
@@ -154,21 +154,21 @@ bool GENG::Threads::gThreadPool::_GetNextTask(std::shared_ptr<gWorkerTask> & tas
 	return GENG_EXIT_FAILURE;
 }
 
-bool GENG::Threads::gThreadPool::_GetQuit()
+bool GENG::Threads::gTaskThreadPool::_GetQuit()
 {
 	std::lock_guard<std::recursive_mutex> guard(m_quitMutex);
 
 	return m_bQuit;
 }
 
-void GENG::Threads::gThreadPool::_SetQuit(const bool & quit)
+void GENG::Threads::gTaskThreadPool::_SetQuit(const bool & quit)
 {
 	std::lock_guard<std::recursive_mutex> guard(m_quitMutex);
 
 	m_bQuit = quit;
 }
 
-void GENG::Threads::gThreadPool::_RunTask(std::shared_ptr<gWorkerTask> & taskPtr, gWorkerInfo * pInfo)
+void GENG::Threads::gTaskThreadPool::_RunTask(std::shared_ptr<gWorkerTask> & taskPtr, gWorkerInfo * pInfo)
 {
 	// Run the task
 	if (taskPtr != nullptr)
@@ -194,9 +194,9 @@ void GENG::Threads::gThreadPool::_RunTask(std::shared_ptr<gWorkerTask> & taskPtr
 	}
 }
 
-int GENG::Threads::gThreadPool::_RunWorkerThread(void * data)
+int GENG::Threads::gTaskThreadPool::_RunWorkerThread(void * data)
 {
-	gThreadPool * m_pool = reinterpret_cast<gThreadPool *>(data);
+	gTaskThreadPool * m_pool = reinterpret_cast<gTaskThreadPool *>(data);
 	if (m_pool == nullptr)
 		return 0;
 

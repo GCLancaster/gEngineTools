@@ -15,7 +15,7 @@ namespace GENG
 {
 	namespace Threads
 	{
-		class gThreadPool
+		class gTaskThreadPool
 		{
 		protected:
 			// Task Item Class
@@ -63,9 +63,9 @@ namespace GENG
 			
 
 		public:
-			gThreadPool();
-			gThreadPool(const int numThreads, const int maxNumThreads = -1);
-			~gThreadPool();
+			gTaskThreadPool();
+			gTaskThreadPool(const int numThreads, const int maxNumThreads = -1);
+			~gTaskThreadPool();
 
 			void Init(const int numThreads, const int maxNumThreads = -1);
 			void Destroy();
