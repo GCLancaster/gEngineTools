@@ -13,8 +13,7 @@ namespace GENG
 	{
 		class gMessagePoolMaster
 		{
-		private:
-			static std::unique_ptr<gMessagePoolMaster> instance;
+			static std::shared_ptr<gMessagePoolMaster> instance;
 
 			std::vector<std::unique_ptr<gMessagePoolBase>> m_pools;
 
@@ -22,11 +21,11 @@ namespace GENG
 			gMessagePoolMaster() { DBGINIT; };
 			~gMessagePoolMaster() { m_pools.clear(); DBGDEST; };
 
-			static gMessagePoolMaster * Get()
+			static std::shared_ptr<gMessagePoolMaster> Get()
 			{
 				if (instance == nullptr)
-					instance = std::make_unique<gMessagePoolMaster>();
-				return instance.get();
+					instance = std::make_shared<gMessagePoolMaster>();
+				return instance;
 			}
 
 			template <typename MsgPoolType>
@@ -50,6 +49,6 @@ namespace GENG
 			}
 		};
 
-		__declspec(selectany) std::unique_ptr<gMessagePoolMaster> gMessagePoolMaster::instance;
+		__declspec(selectany) std::shared_ptr<gMessagePoolMaster> gMessagePoolMaster::instance;
 	};
 };

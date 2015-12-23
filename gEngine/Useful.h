@@ -12,22 +12,31 @@
 	#include <rapidxml.hpp>
 #endif // LIB_XML
 
+#ifdef LIB_CHAISCRIPT
+#include <chaiscript/chaiscript.hpp>
+#include <chaiscript/chaiscript_stdlib.hpp>
+#endif // LIB_CHAISCRIPT
+
 #include <vector>
 #include <array>
 #include <utility>
 #include <memory>
+#include <thread>
 #include "System\Logging\gLogger.h"
 
 static void Init()
 {
+	GENG::Logging::InitaliseLogging();
 #ifdef LIB_SDL
 	LOG("Using SDL2");
 	SDL_Init(SDL_INIT_EVERYTHING);
 #endif // LIB_SDL
+#ifdef LIB_CHAISCRIPT
+	LOG("Using ChaiScript");
+#endif // LIB_CHAISCRIPT
 #ifdef LIB_XML
 	LOG("Using RapidXML");
 #endif // LIB_XML
-	GENG::Logging::InitaliseLogging();
 };
 static void Destroy()
 {
@@ -40,24 +49,38 @@ namespace GENG
 {
 #define GENG_EXIT_SUCCESS true;
 #define GENG_EXIT_FAILURE false;
-
+#define KB(x)((x) << 10)
+#define MB(x)((x) << 20)
+#define GB(x)((x) << 30)
+	
 	template<typename T>
 	using deleted_unique_ptr = std::unique_ptr<T, std::function<void(T*)>>;
 
 	template<typename T>
-	void _removeObjectFromVector(std::vector<T> &vec, T obj, bool bDelete = false)
+	void _removeObjectFromVector(std::vector<T> &vec, const T & obj)
 	{
 		auto f = std::find(vec.begin(), vec.end(), obj);
 		if (f != vec.end())
 		{
-			if (bDelete)
-				delete *f;
+			vec.erase(f);
+		}
+	}
+	template<typename T>
+	void _removeObjectFromVectorAndDelete(std::vector<T> &vec, const T & obj)
+	{
+		auto f = std::find(vec.begin(), vec.end(), obj);
+		if (f != vec.end())
+		{
+			delete *f;
 			vec.erase(f);
 		}
 	}
 
-	template<int BuffSize> struct factorial { enum { value = BuffSize * factorial<BuffSize - 1>::value }; };
-	template<> struct factorial<1> { enum { value = 1 }; };
+	namespace Maths
+	{
+		template<int NUM> struct factorial { enum { value = NUM * factorial<NUM - 1>::value }; };
+		template<> struct factorial<1> { enum { value = 1 }; };
+	}
 
 	static std::vector<std::string> _getDelimited(const std::string & string, const std::string & delimiter = ",")
 	{
@@ -76,8 +99,8 @@ namespace GENG
 
 	static std::pair<std::string, int> _getStringOrder(const std::string & string)
 	{
-		int endOfName = string.find('[');
-		int endOfNum = string.find(']');
+		size_t endOfName = string.find('[');
+		size_t endOfNum = string.find(']');
 		if (endOfName >= 0 && endOfNum > 0)
 		{
 			std::string name = string.substr(0, endOfName);
@@ -86,40 +109,6 @@ namespace GENG
 		}
 
 		return std::make_pair<std::string, int>(std::string(string), 0);
-	};
-
-	namespace DisplayDevice
-	{
-		struct GLWindow
-		{
-		private:
-			deleted_unique_ptr<SDL_Window> m_glWindow;
-		public:
-			GLWindow(const std::string & winName)
-			{
-				m_glWindow = deleted_unique_ptr<SDL_Window>(
-					SDL_CreateWindow(winName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL),
-					[](SDL_Window * pWindow) { SDL_DestroyWindow(pWindow); });
-				if (m_glWindow == nullptr)
-					DERROR("Could not initialise Window: " << SDL_GetError());	
-			};
-			~GLWindow() {};
-			SDL_Window * Get() { return m_glWindow.get(); };
-		};
-		struct GLContext
-		{
-		private:
-			SDL_GLContext m_glContext;
-		public:
-			GLContext(SDL_Window * window) 
-			{ 
-				m_glContext = SDL_GL_CreateContext(window); 
-				if (m_glContext == nullptr)
-					DERROR("Could not initialise OpenGL Context: " << SDL_GetError());
-			};
-			~GLContext() { SDL_GL_DeleteContext(m_glContext); };
-			SDL_GLContext Get() { return m_glContext; };
-		};
 	};
 
 	//static inline void GetBounds(const std::vector<Vec2> & tightFit, std::array<Vec2, 2> & bounds)
@@ -141,7 +130,8 @@ namespace GENG
 		float y = -1;
 
 		Vec2() {};
-		Vec2(const int & x, const int & y) : x(x), y(y) {};
+		Vec2(const uint32_t & x, const uint32_t & y) : x(static_cast<float>(x)), y(static_cast<float>(y)) {};
+		Vec2(const float & x, const float & y) : x(x), y(y) {};
 		~Vec2() {};
 	};
 }
