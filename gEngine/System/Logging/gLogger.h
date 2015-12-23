@@ -18,13 +18,10 @@ namespace GENG
 	{
 		static bool g_loggingActive = true;
 		static std::recursive_mutex g_loggingMutex;
-		static std::ofstream g_logFile;
-		static std::thread g_loggingAutoSave;
+		//static std::thread g_loggingAutoSave;
 
 		static std::string GetAppFolder()
 		{
-			std::unique_lock<std::recursive_mutex> guard(g_loggingMutex);
-
 			static std::string appFolder;
 			if (appFolder.empty())
 			{
@@ -37,17 +34,18 @@ namespace GENG
 
 		static std::string GetLoggingPath()
 		{
-			std::unique_lock<std::recursive_mutex> guard(g_loggingMutex);
-
 			static std::string logFolder;
-			auto now = time(0);
-			tm timeS;
-			char buff[80];
-			localtime_s(&timeS, &now);
-			strftime(buff, sizeof(buff), "%Y_%m_%d", &timeS);
-
-			logFolder = GetAppFolder() + "main_" + buff + "_log.txt";
-
+			static std::chrono::steady_clock::time_point prevTime = std::chrono::steady_clock::now();
+			if (logFolder.empty() || prevTime < (std::chrono::steady_clock::now() - std::chrono::minutes(30)))
+			{
+				prevTime = std::chrono::steady_clock::now();
+				auto now = time(0);
+				tm timeS;
+				char buff[80];
+				localtime_s(&timeS, &now);
+				strftime(buff, sizeof(buff), "%Y_%m_%d", &timeS);
+				logFolder = GetAppFolder() + "main_" + buff + "_log.txt";
+			}
 			return logFolder;
 		};
 
@@ -69,6 +67,7 @@ namespace GENG
 
 			DbgMsg(msg);
 			
+			std::ofstream g_logFile;
 			g_logFile.open(GetLoggingPath(), std::ofstream::out | std::ofstream::app);
 			if (g_logFile.is_open())
 			{
@@ -88,7 +87,6 @@ namespace GENG
 		{
 			std::unique_lock<std::recursive_mutex> guard(g_loggingMutex);
 			g_loggingActive = true;
-			g_logFile.open(GetLoggingPath(), std::ofstream::out | std::ofstream::app);
 
 			LogMsg("Initalise Logging");
 		};
@@ -98,10 +96,7 @@ namespace GENG
 			std::unique_lock<std::recursive_mutex> guard(g_loggingMutex);
 
 			LogMsg("Destroy Logging");
-
-			if (g_logFile.is_open())
-				g_logFile.close();
-
+			
 			g_loggingActive = false;
 		};
 	};
