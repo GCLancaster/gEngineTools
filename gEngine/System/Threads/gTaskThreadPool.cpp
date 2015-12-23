@@ -7,7 +7,7 @@ GENG::Threads::gTaskThreadPool::gTaskThreadPool()
 {
 }
 
-GENG::Threads::gTaskThreadPool::gTaskThreadPool(const int numThreads, const int maxNumThreads /*= -1*/)
+GENG::Threads::gTaskThreadPool::gTaskThreadPool(const uint32_t numThreads, const uint32_t maxNumThreads /*= -1*/)
 {
 	Init(numThreads, maxNumThreads);
 }
@@ -17,7 +17,7 @@ GENG::Threads::gTaskThreadPool::~gTaskThreadPool()
 	Destroy();
 }
 
-void GENG::Threads::gTaskThreadPool::Init(const int numThreads, const int maxNumThreads /*= -1*/)
+void GENG::Threads::gTaskThreadPool::Init(const uint32_t numThreads, const uint32_t maxNumThreads /*= -1*/)
 {
 	Destroy();
 
@@ -42,11 +42,11 @@ void GENG::Threads::gTaskThreadPool::Destroy()
 	ClearThreads();
 }
 
-bool GENG::Threads::gTaskThreadPool::AddThread(const int numToAdd /*= 1*/)
+bool GENG::Threads::gTaskThreadPool::AddThread(const uint32_t numToAdd /*= 1*/)
 {
 	std::lock_guard<std::recursive_mutex> guard(m_poolMutex);
 
-	for (int i = 0; i < numToAdd; i++)
+	for (uint32_t i = 0; i < numToAdd; i++)
 	{
 		if (m_maxThreads != -1 && m_workers.size() >= m_maxThreads)
 		{
@@ -54,13 +54,13 @@ bool GENG::Threads::gTaskThreadPool::AddThread(const int numToAdd /*= 1*/)
 			return GENG_EXIT_FAILURE;
 		}
 		m_workers.emplace_back(std::make_unique<std::thread>(_RunWorkerThread, &*this));
-		m_numThreads = m_workers.size();
+		m_numThreads = static_cast<uint32_t>(m_workers.size());
 	}
 
 	return GENG_EXIT_SUCCESS;
 }
 
-void GENG::Threads::gTaskThreadPool::AddTask(const std::string & name, std::function<void(void *)> task, void * data)
+void GENG::Threads::gTaskThreadPool::AddTask(const std::string & name, const tyFuncPair & funcPair)
 {
 	bool bWorkerAvailable = false;
 
@@ -86,7 +86,7 @@ void GENG::Threads::gTaskThreadPool::AddTask(const std::string & name, std::func
 	{
 		std::lock_guard<std::recursive_mutex> guard(m_taskMutex);
 
-		m_taskQueue.push_back(std::make_shared<gWorkerTask>(name, task, data));
+		m_taskQueue.push_back(std::make_shared<gWorkerTask>(name, funcPair));
 
 		DBG("Added task (" << name << ")");
 
@@ -118,25 +118,29 @@ void GENG::Threads::gTaskThreadPool::ClearTaskQueue()
 	m_taskCond.notify_all();
 }
 
-void GENG::Threads::gTaskThreadPool::WaitToFinish()
+std::chrono::milliseconds GENG::Threads::gTaskThreadPool::WaitToFinish()
 {
-	int tasksLeft = 0;
+	size_t tasksLeft = 0;
 	{
 		std::lock_guard<std::recursive_mutex> guard(m_taskMutex);
 		tasksLeft = m_taskQueue.size();
 	}
 
-	std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-
-	while (tasksLeft > 0)
+	if (tasksLeft > 0)
 	{
-		std::lock_guard<std::recursive_mutex> guard(m_taskMutex);
-		tasksLeft = m_taskQueue.size();
-	}
+		std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
-	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-	auto time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-	DBG("Finished waiting. Tasks took " << time.count() << "ms");
+		while (tasksLeft > 0)
+		{
+			std::lock_guard<std::recursive_mutex> guard(m_taskMutex);
+			tasksLeft = m_taskQueue.size();
+		}
+
+		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+		auto time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+		return time;
+	}
+	return std::chrono::milliseconds(0);
 }
 
 bool GENG::Threads::gTaskThreadPool::_GetNextTask(std::shared_ptr<gWorkerTask> & task)
@@ -179,7 +183,7 @@ void GENG::Threads::gTaskThreadPool::_RunTask(std::shared_ptr<gWorkerTask> & tas
 
 			pInfo->name = taskPtr->m_name;
 
-			taskPtr->m_task(taskPtr->m_data);
+			taskPtr->m_task.first(taskPtr->m_task.second);
 
 			DBG("Completed task (" << taskPtr->m_name << ")");
 
