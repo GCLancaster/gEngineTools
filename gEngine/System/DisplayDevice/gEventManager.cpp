@@ -39,6 +39,7 @@ void GENG::DisplayDevice::gEventManager::HandleEvents()
 		HandleKeyboardEvent(eventHandler, SDL_KEYDOWN);
 		HandleKeyboardEvent(eventHandler, SDL_KEYUP);
 		HandleEventHandlers(eventHandler, g_eventHandlers);
+		HandleEventBehaviours(eventHandler);
 	}
 }
 
@@ -189,17 +190,9 @@ void GENG::DisplayDevice::gEventManager::HandleKeyboardEvent(const SDL_Event & e
 	if (m_keyHeldDownTime[SDLK_LCTRL].m_bPressed && m_keyHeldDownTime[SDLK_f].m_bPressed)
 	{
 		if (!m_bWindowMaximised)
-		{
-			if (m_pWindow != nullptr)
-				SDL_SetWindowFullscreen(m_pWindow->Get(), SDL_TRUE);
-			m_bWindowMaximised = true;
-		}
+			SetWindowMaximised(true);
 		else
-		{
-			if (m_pWindow != nullptr)
-				SDL_SetWindowFullscreen(m_pWindow->Get(), SDL_FALSE);
-			m_bWindowMaximised = false;
-		}
+			SetWindowMaximised(false);
 	}
 }
 
@@ -207,4 +200,10 @@ void GENG::DisplayDevice::gEventManager::HandleEventHandlers(const SDL_Event & e
 {
 	for (auto pHandler : eventHandlers)
 		pHandler->HandleEvent(event, m_keyHeldDownTime);
+}
+
+void GENG::DisplayDevice::gEventManager::HandleEventBehaviours(const SDL_Event & event)
+{
+	for (auto fBehaviour : m_eventBehaviours)
+		fBehaviour(event, m_keyHeldDownTime);
 }
