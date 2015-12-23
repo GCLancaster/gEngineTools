@@ -1,0 +1,7 @@
+DBG("ingame.chai");
+gameloop.SetMaxFPS(60);
+
+//for (var i = 0; i < 10; ++i)
+//{
+//	DBG(i);
+//}

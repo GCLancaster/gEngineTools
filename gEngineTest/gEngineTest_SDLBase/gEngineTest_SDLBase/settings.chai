@@ -1,0 +1,6 @@
+DBG("settings.chai");
+DBG(WindowName("gEngine - Default window"));
+DBG(WindowWidth(768));
+DBG(WindowHeight(576));
+DBG(WindowIsMaximised(false));
+DBG(MaxFPS(60));

@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="gEngine">
+      <UniqueIdentifier>{5cfd17dc-6838-41c3-ac3f-336784593dbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gEngine\Logging">
+      <UniqueIdentifier>{5ea1af25-1c23-4f46-a96e-3ef3f7bb83e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gEngine\Resources">
+      <UniqueIdentifier>{d5bea21d-be9f-4ba2-8107-297500494f4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gEngine\DisplayDevice">
+      <UniqueIdentifier>{15a25bdd-1e59-4759-a59d-c2d82ad1df89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gEngine\Messaging">
+      <UniqueIdentifier>{2fac8281-c3a6-4921-b398-a35120770e74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gEngine\Threads">
+      <UniqueIdentifier>{655bd475-868b-4e9b-939a-789e265fb3ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gEngine\Objects">
+      <UniqueIdentifier>{70c44e3f-70ea-4266-8544-0d895b41b1ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gEngine\Scripting">
+      <UniqueIdentifier>{8a319bd7-890c-4231-9ae2-4a5a2c0fcbc5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\gEngine\System\Logging\gLogger.cpp">
+      <Filter>gEngine\Logging</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\gEngine\System\DisplayDevice\gEventManager.cpp">
+      <Filter>gEngine\DisplayDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\gEngine\System\Threads\gTaskThreadPool.cpp">
+      <Filter>gEngine\Threads</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\gEngine\System\Threads\gProcessThreadPool.cpp">
+      <Filter>gEngine\Threads</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\gEngine\System\Scripting\gScriptingState.cpp">
+      <Filter>gEngine\Scripting</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\gEngine\Useful.h">
+      <Filter>gEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Logging\gLogger.h">
+      <Filter>gEngine\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Resources\gFileHandling.h">
+      <Filter>gEngine\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Messaging\gMessagePool.h">
+      <Filter>gEngine\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Messaging\gMessagePoolMaster.h">
+      <Filter>gEngine\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Messaging\gMessenger.h">
+      <Filter>gEngine\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Messaging\gListener.h">
+      <Filter>gEngine\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\DisplayDevice\gEventManager.h">
+      <Filter>gEngine\DisplayDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Threads\gTaskThreadPool.h">
+      <Filter>gEngine\Threads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Threads\gProcessThreadPool.h">
+      <Filter>gEngine\Threads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\DisplayDevice\gLoopTimer.h">
+      <Filter>gEngine\DisplayDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Objects\gHandleContainer.h">
+      <Filter>gEngine\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Objects\gObjectComponents.h">
+      <Filter>gEngine\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Scripting\gScriptingState.h">
+      <Filter>gEngine\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\DisplayDevice\gDisplayWindow.h">
+      <Filter>gEngine\DisplayDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Scripting\gScriptingRegister.h">
+      <Filter>gEngine\Scripting</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\gEngine\System\Threads\UsefulThreads.h">
+      <Filter>gEngine\Threads</Filter>
+    </None>
+  </ItemGroup>
+</Project>
