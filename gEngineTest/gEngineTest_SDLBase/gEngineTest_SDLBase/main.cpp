@@ -8,6 +8,7 @@
 #include "gEngine\System\Objects\gHandleContainer.h"
 #include "gEngine\System\Objects\gObjectComponents.h"
 #include "gEngine\System\Resources\gFileHandling.h"
+#include "gEngine\System\Resources\gMemoryManagement.h"
 #include "gEngine\System\Scripting\gScriptingState.h"
 #include "gEngine\System\Threads\gProcessThreadPool.h"
 #include "gEngine\System\Threads\gTaskThreadPool.h"
@@ -131,6 +132,37 @@ int main(int argc, char* args[])
 {
 	Init();
 		
+	//////////////////////////////////////////////////////////////////////////
+	// Test Memory Stack-Allocator
+	struct Size256
+	{
+		uint8_t data[256];
+
+		Size256(){};
+		Size256(const int & v) { memset(&data, v, 256); };
+		~Size256(){};
+	};
+	struct Size512
+	{
+		uint8_t data[512];
+
+		Size512(){};
+		Size512(const int & v) { memset(&data, v, 512); };
+		~Size512(){};
+	};
+
+	GENG::Memory::gStackAllocator<256*8> allocator;
+
+	auto pSize256_1 = allocator.AllocLower<Size256>(1);
+	auto pSize256_2 = allocator.AllocLower<Size256>(2);
+	auto pSize256_3 = allocator.AllocHigher<Size256>(3);
+	auto pSize256_4 = allocator.AllocHigher<Size256>(4);
+	auto pSize256_5 = allocator.AllocHigher<Size256>(6);
+	auto pSize512_6 = allocator.AllocLower<Size512>(7);
+	auto pSize256_7 = allocator.AllocHigher<Size256>(8);
+	
+	allocator.DebugOutput();
+
 	//////////////////////////////////////////////////////////////////////////
 	// Settings
 	const std::string settingsFile = "F:\\My Documents\\GitHub\\gEngineTools\\gEngineTest\\gEngineTest_SDLBase\\gEngineTest_SDLBase\\settings.chai";
