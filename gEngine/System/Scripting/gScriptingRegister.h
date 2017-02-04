@@ -73,6 +73,8 @@ namespace GENG
 			MCR_REGISTER_STATIC_FUNCS(Logging);
 			MCR_REGISTER_STATIC_FUNCS(FileHandling);
 			MCR_REGISTER_STATIC_FUNCS(Threads);
+			pScriptState->RegisterClass<GENG::Vec2>();
+			pScriptState->RegisterClass<GENG::Scripting::ScriptState>();
 			pScriptState->RegisterClass<GENG::DisplayDevice::gGLWindow>();
 			pScriptState->RegisterClass<GENG::DisplayDevice::gEventManager>();
 			pScriptState->RegisterClass<GENG::DisplayDevice::gLoopTimer>();

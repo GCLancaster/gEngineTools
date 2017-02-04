@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="gEngine">
+      <UniqueIdentifier>{25b4d3fc-f228-43f4-bf71-7c3b7ba4d9c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gEngine\System">
+      <UniqueIdentifier>{19fa0c62-61b7-4ae4-81ca-745675fbb11c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gEngine\System\Resources">
+      <UniqueIdentifier>{bd0a3316-739c-4792-9803-ea41d2453713}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gEngine\System\Logging">
+      <UniqueIdentifier>{6ef0b72c-1e9c-436a-9d54-401090e13bf1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\gEngine\Useful.h">
+      <Filter>gEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Resources\gEntryContainer.h">
+      <Filter>gEngine\System\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Resources\gSpriteSheet.h">
+      <Filter>gEngine\System\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Logging\gLogger.h">
+      <Filter>gEngine\System\Logging</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\gEngine\System\Logging\gLogger.cpp">
+      <Filter>gEngine\System\Logging</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -26,7 +26,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -38,7 +38,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -152,6 +152,8 @@
     <ClInclude Include="..\..\..\gEngine\System\Objects\gHandleContainer.h" />
     <ClInclude Include="..\..\..\gEngine\System\Objects\gObjectComponents.h" />
     <ClInclude Include="..\..\..\gEngine\System\Resources\gFileHandling.h" />
+    <ClInclude Include="..\..\..\gEngine\System\Resources\gMemoryManagement.h" />
+    <ClInclude Include="..\..\..\gEngine\System\Resources\gResourcesUseful.h" />
     <ClInclude Include="..\..\..\gEngine\System\Scripting\gScriptingRegister.h" />
     <ClInclude Include="..\..\..\gEngine\System\Scripting\gScriptingState.h" />
     <ClInclude Include="..\..\..\gEngine\System\Threads\gProcessThreadPool.h" />

@@ -72,6 +72,23 @@ namespace GENG
 			//	gHandle handle = pObj->GetHandle();
 			//	RemoveComponent(m_manager, handle);
 			//}
+
+			void RunComponents(std::shared_ptr<GENG::Object::gEntryManager> manager)
+			{
+				if (manager == nullptr)
+					DERROR("Invalid manager passed in!");
+
+				for (auto component : m_components)
+				{
+					if (SHandleValid(component))
+					{
+						RunComponent(component, manager);
+					}
+				}
+			}
+
+		protected:
+			virtual void RunComponent(gHandle & component, std::shared_ptr<GENG::Object::gEntryManager> manager) = 0;
 		};
 
 		class ComponentBase

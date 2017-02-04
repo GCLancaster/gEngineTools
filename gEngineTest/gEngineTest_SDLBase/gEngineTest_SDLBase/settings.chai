@@ -1,6 +1,9 @@
+int iWidth = 576;
+int iHeight = 720;
+
 DBG("settings.chai");
 DBG(WindowName("gEngine - Default window"));
-DBG(WindowWidth(768));
+DBG(WindowWidth(1080));
 DBG(WindowHeight(576));
 DBG(WindowIsMaximised(false));
 DBG(MaxFPS(60));

@@ -125,6 +125,7 @@ void GENG::DisplayDevice::gEventManager::HandleKeyboardEvent(const SDL_Event & e
 	
 	SDL_KeyTypes id = SGetEventKeyID(event);
 	auto & key = m_keyHeldDownTime[id];
+	auto * keyName = SDL_GetKeyName(id);
 
 	//////////////////////////////////////////////////////////////////////////
 	// Handle key press timings
@@ -136,7 +137,8 @@ void GENG::DisplayDevice::gEventManager::HandleKeyboardEvent(const SDL_Event & e
 			key.m_bHeldDown = false;
 
 			auto timeSince = key.TimeSincePress();
-			LOG("Pressed : Key(" << id << ") Time since previous(" << timeSince.count() << ")");
+			
+			LOG("Pressed : Key(" << keyName << ") Time since previous(" << timeSince.count() << ")");
 
 			key.m_timePoint = std::chrono::high_resolution_clock::now();
 		}
@@ -145,7 +147,7 @@ void GENG::DisplayDevice::gEventManager::HandleKeyboardEvent(const SDL_Event & e
 			key.m_bHeldDown = true;
 
 			auto timeSince = key.TimeSincePress();
-			LOG("Hold : Key(" << id << ") Time held down(" << timeSince.count() << ")");
+			LOG("Hold : Key(" << keyName << ") Time held down(" << timeSince.count() << ")");
 		}
 	}
 	else
@@ -154,7 +156,7 @@ void GENG::DisplayDevice::gEventManager::HandleKeyboardEvent(const SDL_Event & e
 		key.m_bHeldDown = false;
 
 		auto timeSince = key.TimeSincePress();
-		LOG("Release : Key(" << id << ") Duration(" << timeSince.count() << ")");
+		LOG("Release : Key(" << keyName << ") Duration(" << timeSince.count() << ")");
 
 		key.m_timePoint = std::chrono::high_resolution_clock::now();
 	}

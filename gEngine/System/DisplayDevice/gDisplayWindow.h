@@ -16,6 +16,7 @@ namespace GENG
 		class gGLWindow
 		{
 		protected:
+			Vec2 m_dimensons;
 			deleted_unique_ptr<SDL_Window> m_glWindow;
 			SDL_GLContext m_glContext;
 
@@ -44,9 +45,13 @@ namespace GENG
 
 			Vec2 SetWindowSize(const uint32_t & width, const uint32_t & height)
 			{
+				m_dimensons.x = width;
+				m_dimensons.y = height;
 				SDL_SetWindowSize(m_glWindow.get(), width, height);
 				return Vec2(width, height);
 			}
+			Vec2 GetWindowSize() const { return m_dimensons; }
+
 			
 			static void ScriptRegisterClass(chaiscript::ModulePtr pModule)
 			{
@@ -59,6 +64,7 @@ namespace GENG
 					{
 						{ chaiscript::fun(&gGLWindow::SetWindowTitle), "SetWindowTitle" },
 						{ chaiscript::fun(&gGLWindow::SetWindowSize), "SetWindowSize" },
+						{ chaiscript::fun(&gGLWindow::GetWindowSize), "GetWindowSize" },
 					}
 				);
 			};

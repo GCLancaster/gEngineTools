@@ -175,7 +175,7 @@ namespace GENG
 
 				return GENG_EXIT_SUCCESS;
 			}
-			virtual bool _getEntry(gHandle & handle, void ** pItem)
+			virtual bool _getEntry(const gHandle & handle, void ** pItem)
 			{
 				std::lock_guard<std::recursive_mutex> guard(m_mutex);
 
@@ -302,7 +302,7 @@ namespace GENG
 			};
 
 			template<typename T>
-			std::shared_ptr<T> GetSharedEntry(gHandle & handle)
+			std::shared_ptr<T> GetSharedEntry(const gHandle & handle)
 			{
 				void * ppVoidItem = nullptr;
 				std::shared_ptr<T> item;
@@ -315,7 +315,7 @@ namespace GENG
 				return item;
 			}
 		
-			void * GetSharedEntry(gHandle & handle)
+			void * GetSharedEntry(const gHandle & handle)
 			{
 				void * ppVoidItem = nullptr;
 
@@ -352,7 +352,7 @@ namespace GENG
 			virtual bool _canRemoveEntry(const gHandle & handle) = 0;
 			virtual bool _addEntry(gHandle & handle, void ** pItem) = 0;
 			virtual bool _updateEntry(gHandle & handle, void ** pItem) = 0;
-			virtual bool _getEntry(gHandle & handle, void ** pItem) = 0;
+			virtual bool _getEntry(const gHandle & handle, void ** pItem) = 0;
 			virtual bool _removeEntry(gHandle & handle) = 0;
 			virtual bool _runFunc(std::function<void(void*)> func) = 0;
 		};

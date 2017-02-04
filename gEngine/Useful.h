@@ -17,6 +17,7 @@
 #include <chaiscript/chaiscript_stdlib.hpp>
 #endif // LIB_CHAISCRIPT
 
+#include <string>
 #include <vector>
 #include <array>
 #include <utility>
@@ -49,6 +50,7 @@ namespace GENG
 {
 #define GENG_EXIT_SUCCESS true;
 #define GENG_EXIT_FAILURE false;
+
 #define KB(x)((x) << 10)
 #define MB(x)((x) << 20)
 #define GB(x)((x) << 30)
@@ -123,6 +125,10 @@ namespace GENG
 	//		bounds[1].y = std::max(bounds[1].y, p.y);
 	//	}
 	//};
+	
+
+
+	//////////////////////////////////////////////////////////////////////////
 
 	struct Vec2
 	{
@@ -133,5 +139,22 @@ namespace GENG
 		Vec2(const uint32_t & x, const uint32_t & y) : x(static_cast<float>(x)), y(static_cast<float>(y)) {};
 		Vec2(const float & x, const float & y) : x(x), y(y) {};
 		~Vec2() {};
+
+		static void ScriptRegisterClass(chaiscript::ModulePtr pModule)
+		{
+			chaiscript::utility::add_class<Vec2>(*pModule, "Vec2",
+				// Constructors
+				{
+					chaiscript::constructor<Vec2()>(),
+					chaiscript::constructor<Vec2(const uint32_t & x, const uint32_t & y)>(),
+					chaiscript::constructor<Vec2(const float & x, const float & y)>()
+				},
+				// Functions
+				{
+					{ chaiscript::fun(&Vec2::x), "x" },
+					{ chaiscript::fun(&Vec2::y), "y" }
+				}
+			);
+		};
 	};
 }

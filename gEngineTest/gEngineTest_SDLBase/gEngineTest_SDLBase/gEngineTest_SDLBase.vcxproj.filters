@@ -107,6 +107,12 @@
     <ClInclude Include="..\..\..\gEngine\System\Scripting\gScriptingRegister.h">
       <Filter>gEngine\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Resources\gMemoryManagement.h">
+      <Filter>gEngine\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gEngine\System\Resources\gResourcesUseful.h">
+      <Filter>gEngine\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\gEngine\System\Threads\UsefulThreads.h">

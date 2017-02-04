@@ -23,13 +23,25 @@ namespace std
 			return std::hash<std::string>() (std::string(s.cbegin(), s.cend()));
 		};
 	};
+
+	template<>
+	struct hash<std::vector<uint8_t>>
+	{
+		typedef std::vector<uint8_t> argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(argument_type const& s) const
+		{
+			return std::hash<std::string>() (std::string(s.cbegin(), s.cend()));
+		};
+	};
 };
 
 namespace GENG
 {
 	namespace FileHandling
 	{
-		static unsigned int SGetFileSize(std::ifstream * pFile)
+		template<typename T = char>
+		static uint32_t SGetFileSize(std::basic_ifstream<T> * pFile)
 		{
 			if (pFile == nullptr || !pFile->is_open())
 			{
@@ -37,25 +49,28 @@ namespace GENG
 				return 0;
 			}
 			pFile->seekg(0, std::ios::end);
-			unsigned int rtn = static_cast<unsigned int>(pFile->tellg());
+			uint32_t rtn = static_cast<uint32_t>(pFile->tellg());
 			pFile->seekg(0, std::ios::beg);
 
 			return rtn;
 		};
-		static unsigned int SGetFileSize(const std::string & filename)
+		
+		template<typename T = char>
+		static uint32_t SGetFileSize(const std::string & filename)
 		{
-			std::ifstream file(filename.c_str(), std::ios::in | std::ios::binary);
-			unsigned int rtn = 0;
+			std::basic_ifstream<T> file(filename.c_str(), std::ios::in | std::ios::binary);
+			uint32_t rtn = 0;
 			if (file.is_open())
 			{
 				file.seekg(0, std::ios::end);
-				rtn = static_cast<unsigned int>(file.tellg());
+				rtn = static_cast<uint32_t>(file.tellg());
 				file.close();
 			}
 			return rtn;
 		};
 
-		static bool SGetFileString(std::ifstream * pFile, std::string & rtn, const unsigned int & offset = 0)
+		template<typename T = char>
+		static bool SGetFileString(std::basic_ifstream<T> * pFile, std::string & rtn, const uint32_t & offset = 0)
 		{
 			if (pFile == nullptr || !pFile->is_open())
 			{
@@ -71,9 +86,11 @@ namespace GENG
 
 			return true;
 		}
-		static bool SGetFileString(const std::string & filename, std::string & data, const unsigned int & offset = 0)
+		
+		template<typename T = char>
+		static bool SGetFileString(const std::string & filename, std::string & data, const uint32_t & offset = 0)
 		{
-			std::ifstream file(filename.c_str(), std::ios::in | std::ios::binary);
+			std::basic_ifstream<T> file(filename.c_str(), std::ios::in | std::ios::binary);
 			if (!file.is_open())
 				return false;
 
@@ -86,8 +103,9 @@ namespace GENG
 
 			return true;
 		}
-
-		static bool SGetFileBuffer(std::ifstream * pFile, std::vector<char> & data, const unsigned int & offset = 0)
+		
+		template<typename T = char>
+		static bool SGetFileBuffer(std::basic_ifstream<T> * pFile, std::vector<T> & data, const uint32_t & offset = 0)
 		{
 			if (pFile == nullptr || !pFile->is_open())
 			{
@@ -104,9 +122,10 @@ namespace GENG
 			return true;
 		}
 
-		static bool SGetFileBuffer(const std::string & filename, std::vector<char> & data, const unsigned int & offset = 0)
+		template<typename T = char>
+		static bool SGetFileBuffer(const std::string & filename, std::vector<T> & data, const uint32_t & offset = 0)
 		{
-			std::ifstream file(filename.c_str(), std::ios::in | std::ios::binary);
+			std::basic_ifstream<T> file(filename.c_str(), std::ios::in | std::ios::binary);
 			if (!file.is_open())
 				return false;
 
@@ -120,8 +139,8 @@ namespace GENG
 			return true;
 		}
 
-		template<uint32_t BuffSize>
-		static bool SGetFileArray(std::ifstream * pFile, std::array<char, BuffSize> & data, const unsigned int & offset = 0)
+		template<uint32_t BuffSize, typename T = uint8_t>
+		static bool SGetFileArray(std::basic_ifstream<T> * pFile, std::array<T, BuffSize> & data, const uint32_t & offset = 0)
 		{
 			if (pFile == nullptr || !pFile->is_open())
 			{
@@ -145,10 +164,10 @@ namespace GENG
 			return data;
 		}
 
-		template<uint32_t BuffSize>
-		static bool SGetFileArray(const std::string & filename, std::array<char, BuffSize> & data, const unsigned int & offset = 0)
+		template<uint32_t BuffSize, typename T = uint8_t>
+		static bool SGetFileArray(const std::string & filename, std::array<T, BuffSize> & data, const uint32_t & offset = 0)
 		{
-			std::ifstream file(filename.c_str(), std::ios::in | std::ios::binary);
+			std::basic_ifstream<T> file(filename.c_str(), std::ios::in | std::ios::binary);
 			if (!file.is_open())
 				return false;
 
@@ -169,8 +188,8 @@ namespace GENG
 			return true;
 		}
 
-		template<uint32_t BuffSize, uint8_t NumArray>
-		static bool SGetFileArrays(std::ifstream * pFile, std::array<std::array<char, BuffSize>, NumArray> & data, const unsigned int & offset = 0)
+		template<uint32_t BuffSize, uint8_t NumArray, typename T = uint8_t>
+		static bool SGetFileArrays(std::basic_ifstream<T> * pFile, std::array<std::array<T, BuffSize>, NumArray> & data, const uint32_t & offset = 0)
 		{
 			if (pFile == nullptr || !pFile->is_open())
 			{
@@ -199,10 +218,10 @@ namespace GENG
 			return true;
 		};
 
-		template<uint32_t BuffSize, uint8_t NumArray>
-		static bool SGetFileArrays(const std::string & filename, std::array<std::array<char, BuffSize>, NumArray> & data, const unsigned int & offset = 0)
+		template<uint32_t BuffSize, uint8_t NumArray, typename T = uint8_t>
+		static bool SGetFileArrays(const std::string & filename, std::array<std::array<T, BuffSize>, NumArray> & data, const uint32_t & offset = 0)
 		{
-			std::ifstream file(filename.c_str(), std::ios::in | std::ios::binary);
+			std::basic_ifstream<T> file(filename.c_str(), std::ios::in | std::ios::binary);
 			if (!file.is_open())
 				return false;
 
@@ -230,38 +249,62 @@ namespace GENG
 			return true;
 		};
 
-		template<unsigned int NumThreads = 1, typename bufferType = std::vector<char>>
-		static bool SLoadMultithreaded(const std::string & m_fileName, bufferType & data, unsigned int chunkSize = 0)
+		template<typename T = uint8_t>
+		static bool SLoadMultithreaded(const std::string & m_fileName, std::vector<T> & data, const uint32_t & numThreads = 1, const uint32_t & chunkSize = 0)
 		{
+			using bufferType = std::vector<T>;
 			struct threadData
 			{
-				std::ifstream file;
-				unsigned int offset = 0;
-				unsigned int chunkSize = 0;
-				unsigned int threadSize = 0;
+				std::basic_ifstream<T> file;
+				uint32_t offset = 0;
+				uint32_t chunkSize = 0;
+				uint32_t threadSize = 0;
 				bufferType * pBuffer;
 			};
 
-			std::array<threadData, NumThreads> multiThreadData;
+			std::vector<threadData> multiThreadData(numThreads);
 			GENG::Threads::gProcessThreadPool pool;
-			pool.Init(NumThreads);
+			pool.Init(numThreads);
 
-			std::ifstream file = std::ifstream(m_fileName.c_str(), std::ios::in | std::ios::binary);
+			std::basic_ifstream<T> file(m_fileName.c_str(), std::ios::in | std::ios::binary);
 
 			if (!file.is_open())
 				return false;
 
-			const unsigned int fileSize = GENG::FileHandling::SGetFileSize(&file);
+			const uint32_t fileSize = GENG::FileHandling::SGetFileSize(&file);
 
-			auto sizePerThread = static_cast<unsigned int>(std::ceil(static_cast<float>(fileSize) / static_cast<float>(NumThreads)));
+			auto sizePerThread = static_cast<uint32_t>(std::ceil(static_cast<float>(fileSize) / static_cast<float>(numThreads)));
 
 			data.clear();
 			data.resize(fileSize);
 
-			std::vector<GENG::Threads::tyFuncPair> pairs;
-			for (int i = 0; i < NumThreads; i++)
+			auto loaderTask = [](void * data) -> void
 			{
-				multiThreadData[i].file = std::ifstream(m_fileName.c_str(), std::ios::in | std::ios::binary);
+				threadData * pData = reinterpret_cast<threadData*>(data);
+				if ((pData != nullptr) && (pData->file.is_open()) && (pData->pBuffer != nullptr))
+				{
+					pData->file.seekg(pData->offset, std::basic_ifstream<T>::beg);
+
+					auto pos = &(*pData->pBuffer)[0] + pData->offset;
+					auto cSize = pData->chunkSize;
+
+					while (pData->threadSize > 0)
+					{
+						if (pData->threadSize < cSize)
+							cSize = pData->threadSize;
+						pData->file.read(pos, cSize);
+						pData->threadSize -= cSize;
+						pos += cSize;
+					}
+
+					pData->file.close();
+				}
+			};
+
+			std::vector<GENG::Threads::tyFuncPair> pairs;
+			for (int i = 0; i < numThreads; i++)
+			{
+				multiThreadData[i].file = std::basic_ifstream<T>(m_fileName.c_str(), std::ios::in | std::ios::binary);
 				multiThreadData[i].offset = sizePerThread * i;
 				multiThreadData[i].pBuffer = &data;
 				if (chunkSize > 1)
@@ -276,29 +319,6 @@ namespace GENG
 					multiThreadData[i].threadSize = sizePerThread;
 				}
 
-				auto loaderTask = [](void * data) -> void
-				{
-					threadData * pData = reinterpret_cast<threadData*>(data);
-					if ((pData != nullptr) && (pData->file.is_open()) && (pData->pBuffer != nullptr))
-					{
-						pData->file.seekg(pData->offset, std::ifstream::beg);
-
-						auto pos = &(*pData->pBuffer)[0] + pData->offset;
-						auto cSize = pData->chunkSize;
-
-						while (pData->threadSize > 0)
-						{
-							if (pData->threadSize < cSize)
-								cSize = pData->threadSize;
-							pData->file.read(pos, cSize);
-							pData->threadSize -= cSize;
-							pos += cSize;
-						}
-
-						pData->file.close();
-					}
-				};
-
 				GENG::Threads::tyFuncPair pair;
 				pair.first = loaderTask;
 				pair.second = &multiThreadData[i];
@@ -309,14 +329,14 @@ namespace GENG
 			auto timeTaken = pool.WaitToFinish();
 			
 			LOG("Time to load \'" << m_fileName << "\' : " << timeTaken.count() << " milliseconds "
-				<< "NumThreads(" << NumThreads << ") ChunkSize(" << chunkSize << ")");
+				<< "NumThreads(" << numThreads << ") ChunkSize(" << chunkSize << ")");
 
 #ifdef _CHECK_HASH_
 			const unsigned numMB = 500;
 			if (data.size() > MB(numMB))
 			{
-				std::vector<char> first(data.begin(), data.begin() + MB(numMB / 2));
-				std::vector<char> last(data.end() - MB(numMB / 2), data.end());
+				std::vector<T> first(data.begin(), data.begin() + MB(numMB / 2));
+				std::vector<T> last(data.end() - MB(numMB / 2), data.end());
 				LOG("Hash(Split)(" << std::hash<bufferType>{}(first) << "|" << std::hash<bufferType>{}(last) << ")");
 			}
 			else
@@ -329,5 +349,183 @@ namespace GENG
 
 			return true;
 		};
+
+		namespace Compression
+		{			
+			template<uint32_t TypeSet = 1, typename T = uint8_t>
+			static bool SEncode_RunLengthEncoding(const T * inputBuffer, const size_t & inputSize, std::vector<T> & outputBuffer)
+			{
+				if (inputSize <= 0)
+					return false;
+
+				struct RunSet
+				{
+					T * set[TypeSet];
+					bool operator==(const RunSet & rhs)
+					{
+						for (int i = 0; i < TypeSet; i++)
+						{
+							if ((*set[i]) != (*rhs.set[i]))
+								return false;
+						}
+						return true;
+					}
+				};
+				using bufferType = std::vector<T>;
+				T runCount = 0;
+				RunSet runValueA;
+				RunSet runValueB;
+
+				outputBuffer.clear();
+				outputBuffer.reserve(inputSize / 2);
+
+				auto readValue = [&inputBuffer](size_t & position, RunSet & value)
+				{
+					for (int i = 0; i < TypeSet; i++)
+						value.set[i] = const_cast<T*>(&inputBuffer[position++]);
+				};
+				auto writeValue = [&outputBuffer, &runCount, &runValueA, &runValueB]()
+				{
+					outputBuffer.emplace_back(runCount + 1);
+
+					for (int i = 0; i < TypeSet; i++)
+						outputBuffer.emplace_back((*runValueA.set[i]));
+
+					runValueA = runValueB;
+					runCount = 0;
+				};
+
+				size_t runIter = 0;
+
+				readValue(runIter, runValueA);
+
+				bool bEOF = false;
+				while (!bEOF)
+				{
+					readValue(runIter, runValueB);
+					
+					if (runValueA == runValueB)
+					{
+						if (runCount <= (std::numeric_limits<T>::max() - 1))
+							runCount++;
+						else
+							writeValue();
+					}
+					else
+						writeValue();
+				
+					bEOF = (runIter == inputSize);
+				}
+
+				writeValue();
+
+				return true;
+			}
+
+			template<uint32_t TypeSet = 1, typename T = uint8_t>
+			static bool SDecode_RunLengthEncoding(const T * inputBuffer, const size_t & inputSize, std::vector<T> & outputBuffer)
+			{
+				if (inputSize < 2)
+					return false;
+
+				using bufferType = std::vector<T>;
+
+				outputBuffer.clear();
+				outputBuffer.reserve(inputSize * 2);
+
+				uint32_t i = 0;
+				while (i < inputSize)
+				{
+					const T * runCount = &inputBuffer[i++];
+					T * set[TypeSet];
+					for (int s = 0; s < TypeSet; s++)
+					{
+						if (i >= inputSize)
+							break;
+						set[s] = const_cast<T*>(&inputBuffer[i++]);
+					}
+
+					for (T c = 0; c < (*runCount); c++)
+					{
+						for (int s = 0; s < TypeSet; s++)
+							outputBuffer.emplace_back((*set[s]));
+					}
+				}
+
+				return outputBuffer.size() > 2;
+			}
+
+			template<uint32_t TypeSet = 1, typename T = uint8_t>
+			static bool SEncode_RunLengthEncoding(const std::vector<T> & inputBuffer, std::vector<T> & outputBuffer)
+			{
+				return SEncode_RunLengthEncoding<TypeSet, T>(inputBuffer.data(), inputBuffer.size(), outputBuffer);
+			}
+
+			template<uint32_t TypeSet = 1, typename T = uint8_t>
+			static bool SDecode_RunLengthEncoding(const std::vector<T> & inputBuffer, std::vector<T> & outputBuffer)
+			{
+				return SDecode_RunLengthEncoding<TypeSet, T>(inputBuffer.data(), inputBuffer.size(), outputBuffer);
+			}
+
+			template<uint32_t TypeSet = 1, typename T = uint8_t>
+			static bool SEncode_RunLengthEncodingMultiThreaded(const std::vector<T> & inputBuffer, std::vector<T> & outputBuffer, const uint32_t numThreads = 1)
+			{
+				if (inputBuffer.size() < 2)
+					return false;
+
+				using bufferType = std::vector<T>;
+				struct threadData
+				{
+					T * pBuffer = nullptr;
+					uint32_t bufferSize = 0;
+					bufferType outputBuffer;
+				};
+
+				std::vector<threadData> multiThreadData(numThreads);
+				GENG::Threads::gProcessThreadPool pool;
+				pool.Init(numThreads);
+				
+				const size_t fileSize = inputBuffer.size();
+
+				auto sizePerThread = static_cast<uint32_t>(std::ceil(static_cast<float>(fileSize) / static_cast<float>(numThreads)));
+
+				outputBuffer.clear();
+				outputBuffer.reserve(fileSize / 2);
+				
+				auto loaderTask = [](void * data) -> void
+				{
+					threadData * pData = reinterpret_cast<threadData*>(data);
+
+					if ((pData != nullptr) && (pData->pBuffer != nullptr))
+					{
+						SEncode_RunLengthEncoding<TypeSet, T>(pData->pBuffer, pData->bufferSize, pData->outputBuffer);
+					}
+				};
+
+				std::vector<GENG::Threads::tyFuncPair> pairs;
+				for (int i = 0; i < numThreads; i++)
+				{
+					uint32_t offset = sizePerThread * i;
+					T * pData = const_cast<T*>(&inputBuffer[0]) + offset;
+					multiThreadData[i].pBuffer = pData;
+					multiThreadData[i].bufferSize = sizePerThread;
+
+					GENG::Threads::tyFuncPair pair;
+					pair.first = loaderTask;
+					pair.second = &multiThreadData[i];
+					pairs.push_back(pair);
+				}
+				pool.AddTask("", pairs);
+
+				auto timeTaken = pool.WaitToFinish();
+
+				for (int i = 0; i < numThreads; i++)
+				{
+					outputBuffer.insert(outputBuffer.end(), multiThreadData[i].outputBuffer.begin(), multiThreadData[i].outputBuffer.end());
+				}
+
+				return true;
+			}
+		}
 	}
 };

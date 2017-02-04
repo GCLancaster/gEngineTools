@@ -1,0 +1,5 @@
+<sheet name="testImage" asset="F:\My Documents\GitHub\gEngineTools\gEngineTest\gEngineTest_SpriteSheet\gEngineTest_SpriteSheet\testImage.bmp">
+	<sprite name="test" bounds="0,0,256,256"/>
+	<sprite name="ass[0]" bounds="0,0,20,256"/>
+	<sprite name="ass[1]" bounds="20,0,20,256"/>
+</sheet>
