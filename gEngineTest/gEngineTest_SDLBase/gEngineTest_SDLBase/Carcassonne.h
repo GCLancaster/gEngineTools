@@ -47,6 +47,46 @@ namespace Carcassonne
 		"Left",
 		"Right"
 	};
+	enum CityEdgePoints
+	{
+		ceTopLeft,
+		ceTop,
+		ceTopRight,
+		ceBottomLeft,
+		ceBottom,
+		ceBottomRight,
+		ceLeft,
+		ceRight,
+
+		ceCOUNT,
+		ceNULL
+	};
+	static const char * gCityEdgePointsNames[] =
+	{
+		"TopLeft",
+		"Top",
+		"TopRight",
+		"BottomLeft",
+		"Bottom",
+		"BottomRight",
+		"Left",
+		"Right"
+	};
+	static std::pair<TileEdge, TileEdge> STileEdgeFromCityEdge(const CityEdgePoints & ceEdge)
+	{
+		switch (ceEdge)
+		{
+		case ceTopLeft:		return std::make_pair(csTop, csLeft);
+		case ceTop:			return std::make_pair(csTop, csTop);
+		case ceTopRight:	return std::make_pair(csTop, csRight);
+		case ceBottomLeft:  return std::make_pair(csBottom, csLeft);
+		case ceBottom: 		return std::make_pair(csBottom, csBottom);
+		case ceBottomRight:	return std::make_pair(csBottom, csRight);
+		case ceLeft:		return std::make_pair(csLeft, csLeft);
+		case ceRight:		return std::make_pair(csRight, csRight);
+		}
+		return std::make_pair(csNULL, csNULL);
+	};
 	static TileEdge SGetInverseTilePosition(const TileEdge & pos)
 	{
 		switch (pos)
@@ -89,11 +129,15 @@ namespace Carcassonne
 	class Tile
 	{
 	public:
-		bool m_bPlaced = false;
 		int m_cardNumber = -1;
 		TilePosition m_pos;
+
+		// Road information
 		bool m_road[csCOUNT];
 		bool m_roadGate[csCOUNT];
+
+		// City information
+		std::array<std::array<CityEdgePoints, 2>, 2> m_cityPoints;
 
 		Tile(){};
 		Tile(const int & id) : m_cardNumber(id) {};
@@ -103,22 +147,19 @@ namespace Carcassonne
 
 		void IncrementPosition(const int & x, const int & y) { m_pos.X += x; m_pos.Y += y; };
 
-		std::array<std::string, 7> Carcassonne::Tile::Render(const bool & bDebugDisplay = false) const;
+		std::array<std::string, 7> Carcassonne::Tile::RenderGrid(const bool & bDebugDisplay = false) const;
+		std::array<std::string, 7> Carcassonne::Tile::RenderRoad(std::array<std::string, 7> & row, const bool & bDebugDisplay = false) const;
+		std::array<std::string, 7> Carcassonne::Tile::RenderCity(std::array<std::string, 7> & row, const bool & bDebugDisplay = false) const;
+		std::array<std::string, 7> Carcassonne::Tile::RenderData(std::array<std::string, 7> & row, const bool & bDebugDisplay = false) const;
 		void GenerateTile();
 	};
 
 	class Board
 	{
-		static const size_t NUM_TILES = 50;
-		static const size_t BOARD_WIDTH = 10;
-		static const size_t BOARD_HEIGHT = 10;
-
-		size_t m_poolPos = NUM_TILES - 2;
-		std::array<Tile, NUM_TILES> m_tilePool;
-		std::vector<int> m_placedTiles;
-		std::vector<int> m_skippedTiles;
-
-		struct TileMap  
+		static const size_t NUM_TILES = 500;
+		static const size_t BOARD_WIDTH = 25;
+		static const size_t BOARD_HEIGHT = 25;
+		struct TileMap
 		{
 			std::array<std::array<Tile *, BOARD_WIDTH>, BOARD_HEIGHT> map;
 
@@ -130,22 +171,22 @@ namespace Carcassonne
 					return false;
 				return true;
 			};
-			bool SetTile(const TilePosition & pos, Tile * pTile) 
+			bool SetTile(const TilePosition & pos, Tile * pTile)
 			{
 				if (!CheckPosition(pos))
 					return false;
 				const int x = pos.x + (BOARD_WIDTH / 2);
 				const int y = pos.y + (BOARD_HEIGHT / 2);
-				map[x][y] = pTile; 
+				map[x][y] = pTile;
 				return true;
 			};
-			Tile * GetTile(const TilePosition & pos) 
+			Tile * GetTile(const TilePosition & pos)
 			{
 				if (!CheckPosition(pos))
 					return nullptr;
 				const int x = pos.x + (BOARD_WIDTH / 2);
 				const int y = pos.y + (BOARD_HEIGHT / 2);
-				return map[x][y]; 
+				return map[x][y];
 			};
 
 			TileMap()
@@ -154,7 +195,12 @@ namespace Carcassonne
 					map[y].assign(nullptr);
 			};
 		};
+
 		TileMap m_tileMap;
+		size_t m_poolPos = NUM_TILES - 2;
+		std::array<Tile, NUM_TILES> m_tilePool;
+		std::vector<int> m_placedTiles;
+		std::vector<int> m_skippedTiles;
 		
 	public:
 		Board();

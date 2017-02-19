@@ -1,28 +1,147 @@
 
 #include "Carcassonne.h"
 
-std::array<std::string, 7> Carcassonne::Tile::Render(const bool & bDebugDisplay /*= false*/) const
+std::array<std::string, 7> Carcassonne::Tile::RenderGrid(const bool & bDebugDisplay /*= false*/) const
 {
-	const auto top = std::string(m_road[csTop] ? (m_roadGate[csTop] ? "#" : "R") : "\'");
-	const auto tmi = std::string(m_road[csTop] ? "R" : " ");
-	const auto bot = std::string(m_road[csBottom] ? (m_roadGate[csBottom] ? "#" : "R") : "_");
-	const auto bmi = std::string(m_road[csBottom] ? "R" : " ");
-	const auto lef = std::string(m_road[csLeft] ? (m_roadGate[csLeft] ? "# " : "R ") : "| ");
-	const auto lmi = std::string(m_road[csLeft] ? "R " : "  ");
-	const auto rig = std::string(m_road[csRight] ? (m_roadGate[csRight] ? " #" : " R") : " |");
-	const auto rmi = std::string(m_road[csRight] ? " R" : "  ");
+	std::array<std::string, 7> row;
+	row[0] = "|'''''''''''|";
+	row[1] = "|           |";
+	row[2] = "|           |";
+	row[3] = "|     +     |";
+	row[4] = "|           |";
+	row[5] = "|           |";
+	row[6] = "|___________|";
+	return row;
+}
 
+std::array<std::string, 7> Carcassonne::Tile::RenderRoad(std::array<std::string, 7> & row, const bool & bDebugDisplay /*= false*/) const
+{
+	const auto top = std::string(m_road[csTop] ? (m_roadGate[csTop] ? "#" : "R") : "");
+	const auto tmi = std::string(m_road[csTop] ? "R" : "");
+	const auto bot = std::string(m_road[csBottom] ? (m_roadGate[csBottom] ? "#" : "R") : "");
+	const auto bmi = std::string(m_road[csBottom] ? "R" : "");
+	const auto lmi = std::string(m_road[csLeft] ? "RR" : "");
+	const auto left = lef + lmi + lmi;
+	const auto rmi = std::string(m_road[csRight] ? "RR" : "");
+	const auto right = rmi + rmi + rig;
+
+	static const size_t rowSize = row[0].size();
+
+	if(m_road[csTop]) row[0].replace(row[0].begin() + (rowSize / 2), row[0].end() - (rowSize / 2), top);
+	if(m_road[csTop]) row[1].replace(row[1].begin() + (rowSize / 2), row[1].end() - (rowSize / 2), tmi);
+	if(m_road[csTop]) row[2].replace(row[2].begin() + (rowSize / 2), row[2].end() - (rowSize / 2), tmi);
+	if(m_road[csLeft]) row[3].replace(row[3].begin(), row[3].begin() + (rowSize / 2), left);
+	if(m_road[csRight]) row[3].replace(row[3].end() - (rowSize / 2), row[3].end(), right);
+	if(m_road[csBottom]) row[4].replace(row[4].begin() + (rowSize / 2), row[4].end() - (rowSize / 2), bmi);
+	if(m_road[csBottom]) row[5].replace(row[5].begin() + (rowSize / 2), row[5].end() - (rowSize / 2), bmi);
+	if(m_road[csBottom]) row[6].replace(row[6].begin() + (rowSize / 2), row[6].end() - (rowSize / 2), bot);
+
+	if (bDebugDisplay)
+	{
+		DBG(row[0]);
+		DBG(row[1]);
+		DBG(row[2]);
+		DBG(row[3]);
+		DBG(row[4]);
+		DBG(row[5]);
+		DBG(row[6]);
+	}
+
+	return row;
+}
+
+std::array<std::string, 7> Carcassonne::Tile::RenderCity(std::array<std::string, 7> & row, const bool & bDebugDisplay /*= false*/) const
+{
+	static const std::string cornerLeft_0 = "|######";
+	static const std::string cornerLeft_1 = "|##";
+	std::string cornerRight_0(cornerLeft_0); std::reverse(std::begin(cornerRight_0), std::end(cornerRight_0));
+	std::string cornerRight_1(cornerLeft_1); std::reverse(std::begin(cornerRight_1), std::end(cornerRight_1));
+	static const std::string centre_0 = "#######";
+	static const std::string centre_1 = "#####";
+	static const std::string centre_2 = "###";
+	static const size_t rowSize = row[0].size();
+
+	auto AdjustRowsToCityEdge = [&](const CityEdgePoints & ceEdge)
+	{
+		switch (ceEdge)
+		{
+		case Carcassonne::ceTopLeft:
+			row[0].replace(row[0].begin(), row[0].begin() + cornerLeft_0.size(), cornerLeft_0);
+			row[1].replace(row[1].begin(), row[1].begin() + cornerLeft_1.size(), cornerLeft_1);
+			break;
+		case Carcassonne::ceTop:
+			row[0].replace(row[0].begin() + ((rowSize - centre_0.size()) / 2), row[0].end() - ((rowSize - centre_0.size()) / 2), centre_0);
+			row[1].replace(row[1].begin() + ((rowSize - centre_1.size()) / 2), row[1].end() - ((rowSize - centre_1.size()) / 2), centre_1);
+			row[2].replace(row[2].begin() + ((rowSize - centre_2.size()) / 2), row[2].end() - ((rowSize - centre_2.size()) / 2), centre_2);
+			break;
+		case Carcassonne::ceTopRight:
+			row[0].replace(row[0].end() - cornerRight_0.size(), row[0].end(), cornerRight_0);
+			row[1].replace(row[1].end() - cornerRight_1.size(), row[1].end(), cornerRight_1);
+			break;
+		case Carcassonne::ceBottomLeft:
+			row[5].replace(row[5].begin(), row[5].begin() + cornerLeft_1.size(), cornerLeft_1);
+			row[6].replace(row[6].begin(), row[6].begin() + cornerLeft_0.size(), cornerLeft_0);
+			break;
+		case Carcassonne::ceBottom:
+			row[4].replace(row[4].begin() + ((rowSize - centre_2.size()) / 2), row[4].end() - ((rowSize - centre_2.size()) / 2), centre_2);
+			row[5].replace(row[5].begin() + ((rowSize - centre_1.size()) / 2), row[5].end() - ((rowSize - centre_1.size()) / 2), centre_1);
+			row[6].replace(row[6].begin() + ((rowSize - centre_0.size()) / 2), row[6].end() - ((rowSize - centre_0.size()) / 2), centre_0);
+			break;
+		case Carcassonne::ceBottomRight:
+			row[5].replace(row[5].end() - cornerRight_1.size(), row[5].end(), cornerRight_1);
+			row[6].replace(row[6].end() - cornerRight_0.size(), row[6].end(), cornerRight_0);
+			break;
+		case Carcassonne::ceLeft:
+			row[0].replace(row[0].begin(), row[0].begin() + 3, "|##");
+			row[1].replace(row[1].begin(), row[1].begin() + 4, "|###");
+			row[2].replace(row[2].begin(), row[2].begin() + 5, "|####");
+			row[3].replace(row[3].begin(), row[3].begin() + 6, "|#####");
+			row[4].replace(row[4].begin(), row[4].begin() + 5, "|####");
+			row[5].replace(row[5].begin(), row[5].begin() + 4, "|###");
+			row[6].replace(row[6].begin(), row[6].begin() + 3, "|##");
+			break;
+		case Carcassonne::ceRight:
+			row[0].replace(row[0].end() - 3, row[0].end(), "##|");
+			row[1].replace(row[1].end() - 4, row[1].end(), "###|");
+			row[2].replace(row[2].end() - 5, row[2].end(), "####|");
+			row[3].replace(row[3].end() - 6, row[3].end(), "#####|");
+			row[4].replace(row[4].end() - 5, row[4].end(), "####|");
+			row[5].replace(row[5].end() - 4, row[5].end(), "###|");
+			row[6].replace(row[6].end() - 3, row[6].end(), "##|");
+			break;
+		case Carcassonne::ceCOUNT:
+		case Carcassonne::ceNULL:
+		default:
+			break;
+		}
+	};
+	
+	AdjustRowsToCityEdge(m_cityPoints[0][0]);
+	AdjustRowsToCityEdge(m_cityPoints[0][1]);
+
+	if (bDebugDisplay)
+	{
+		DBG(row[0]);
+		DBG(row[1]);
+		DBG(row[2]);
+		DBG(row[3]);
+		DBG(row[4]);
+		DBG(row[5]);
+		DBG(row[6]);
+	}
+
+	return row;
+}
+
+std::array<std::string, 7> Carcassonne::Tile::RenderData(std::array<std::string, 7> & row, const bool & bDebugDisplay /*= false*/) const
+{
 	const auto cen = GENG::fixedLength<std::string>(m_cardNumber, 3);
 	const auto xpo = GENG::fixedLength<std::string>(m_pos.x, 3);
 	const auto ypo = GENG::fixedLength<std::string>(m_pos.y, 3);
-	std::array<std::string, 7> row;
-	row[0] = "|'''''" + top + "'''''|";
-	row[1] = "|     " + tmi + "     |";
-	row[2] = "|     " + tmi + "     |";
-	row[3] = lef + lmi + lmi + '+' + rmi + rmi + rig;
-	row[4] = "|     " + bmi + " " + xpo +" |";
-	row[5] = "| " + cen + " " + bmi + " " + ypo + " |";
-	row[6] = "|_____" + bot + "_____|";
+
+	row[4].replace(row[4].begin() + 2, row[4].begin() + 2 + cen.size(), cen);
+	row[4].replace(row[4].end() - 2 - xpo.size(), row[4].end() - 2, xpo);
+	row[5].replace(row[5].end() - 2 - ypo.size(), row[5].end() - 2, ypo);
 
 	if (bDebugDisplay)
 	{
@@ -46,12 +165,55 @@ void Carcassonne::Tile::GenerateTile()
 		m_road[i] = false;
 		m_roadGate[i] = false;
 	}
+	for (int i = 0; i < 2 ; i++)
+	{
+		m_cityPoints[i][0] = ceNULL;
+		m_cityPoints[i][1] = ceNULL;
+	}
 
+	//////////////////////////////////////////////////////////////////////////
 	// Randomise
+	int type[csCOUNT];
+	type[csTop] = (std::rand() % 3);
+	type[csBottom] = (std::rand() % 3);
+	type[csLeft] = (std::rand() % 3);
+	type[csRight] = (std::rand() % 3);
+
+	// Set road
+	for (int i = 0; i < csCOUNT; i++)
+		m_road[i] = (type[i] == 1);
+
+	// Set city
+	std::array<std::vector<CityEdgePoints>, 4> pointsAvailable;
+	std::array<std::vector<CityEdgePoints>, 4> alternateEdges;
+	std::array<bool, 4> edgeHasCity = { false, false, false, false };
+	pointsAvailable[csTop] = { ceTopLeft, ceTop, ceTopRight };
+	pointsAvailable[csBottom] = { ceBottomLeft, ceBottom, ceBottomRight };
+	pointsAvailable[csLeft] = { ceTopLeft, ceLeft, ceBottomLeft };
+	pointsAvailable[csRight] = { ceTopRight, ceRight, ceBottomRight };
+	alternateEdges[csTop] = { ceBottomLeft, ceBottom, ceBottomRight, ceLeft, ceRight };
+	alternateEdges[csBottom] = { ceTopLeft, ceTop, ceTopRight, ceLeft, ceRight };
+	alternateEdges[csLeft] = { ceTop, ceTopRight, ceBottom, ceBottomRight, ceRight };
+	alternateEdges[csRight] = { ceTopLeft, ceTop, ceBottom, ceBottomLeft, ceLeft };
+	int numBlocks = 0;
 	for (int i = 0; i < csCOUNT; i++)
 	{
-		m_road[i] = (std::rand() % 2) == 1;
+		if (type[i] == 2 && !edgeHasCity[i] && numBlocks < 2 && ((std::rand() % 2) == 1))
+		{
+			int block = numBlocks++;
+			m_cityPoints[block][0] = pointsAvailable[i][(std::rand() % pointsAvailable[i].size())];
+			m_cityPoints[block][1] = alternateEdges[i][(std::rand() % alternateEdges[i].size())];
+			const auto edgePair = STileEdgeFromCityEdge(m_cityPoints[block][1]);
+			edgeHasCity[i] = true;
+			edgeHasCity[edgePair.first] = true;
+			edgeHasCity[edgePair.second] = true;
+		}
 	}
+
+	auto row = RenderGrid();
+	RenderCity(row);
+	RenderRoad(row);
+	RenderData(row, true);
 }
 
 Carcassonne::Board::Board()
@@ -64,11 +226,13 @@ Carcassonne::Board::Board()
 		m_tilePool[i].GenerateTile();
 	}
 	PlaceTile({ 0, 0 }, &m_tilePool[NUM_TILES - 1]);
+	m_placedTiles.push_back(NUM_TILES - 1);
 }
 
 bool Carcassonne::Board::GetIsFinished() const
 {
-	return m_poolPos == 0;
+	const auto numUsed = (m_placedTiles.size() + m_skippedTiles.size());
+	return numUsed == NUM_TILES;
 }
 
 Carcassonne::Tile * Carcassonne::Board::GetTopOfStack()
@@ -102,7 +266,9 @@ void Carcassonne::Board::Render()
 			const auto pTile = m_tileMap.map[x][y];
 			if (pTile != nullptr)
 			{
-				const auto tileLines = pTile->Render();
+				auto tileLines = pTile->RenderGrid(); 
+				pTile->RenderRoad(tileLines);
+				pTile->RenderCity(tileLines);
 				for (int i = 0; i < lines.size() ; i++)
 					lines[i].append(tileLines[i]);
 			}
@@ -115,7 +281,7 @@ void Carcassonne::Board::Render()
 					else if (i == lines.size() - 1)
 						lines[i].append("|___________|");
 					else
-						lines[i].append("|           |");
+						lines[i].append("|-----------|");
 				}
 			}
 		}
@@ -165,8 +331,6 @@ bool Carcassonne::Board::_CheckTilePlacementIsValid_Road(const TilePosition & pl
 		else
 		{
 			//LOG("Can place tile. Adjacent tile to the " << gTilePositionNames[edge] << " matches.");
-			pAdjacentTile->Render(true);
-			pTile->Render(true);
 			pTile->m_roadGate[edge] = true;
 			pAdjacentTile->m_roadGate[adjEdge] = true;
 		}

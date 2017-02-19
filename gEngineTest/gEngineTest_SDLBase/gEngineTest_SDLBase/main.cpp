@@ -359,15 +359,6 @@ int main(int argc, char* args[])
 			break;
 	}
 
-#include <windows.h>
-	auto TextCharGotoXY = [](int x, int y)
-	{
-		COORD coord;
-		coord.X = x;
-		coord.Y = y;
-		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-	};
-
 	m_board.Render();
 
 	//TestComponentStructure();
