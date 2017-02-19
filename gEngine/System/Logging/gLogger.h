@@ -49,6 +49,14 @@ namespace GENG
 			return logFolder;
 		};
 
+		static void DbgMsgNoInfo(const std::string & msg)
+		{
+			std::unique_lock<std::recursive_mutex> guard(g_loggingMutex);
+
+			OutputDebugString(msg.c_str());
+			std::cout << msg << std::endl;
+		};
+
 		static void DbgMsg(const std::string & msg)
 		{
 			std::unique_lock<std::recursive_mutex> guard(g_loggingMutex);

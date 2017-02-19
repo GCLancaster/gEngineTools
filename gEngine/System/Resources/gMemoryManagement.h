@@ -182,7 +182,7 @@ namespace GENG
 					return nullptr;
 
 				// Allocate object space
-				LOG("Allocating memory space" << sizeof(T));
+				LOG("Allocating memory space: \"" << sizeof(T) << " \"bytes.");
 				T * pObject = reinterpret_cast<T*>(m_pMarker);
 				*pObject = std::move(T(std::forward<Args>(args)...));
 				m_pMarker += sizeofOBJ;
@@ -194,7 +194,7 @@ namespace GENG
 				m_objects[id] = deleted_unique_ptr<stackObject_n>(new stackObject_n(id, m_allocSpace.size() - 1, reinterpret_cast<void*>(pObject)), 
 				[this](stackObject_n * ptr)
 				{
-					LOG("Clearing memory space" << sizeof(T));
+					LOG("Clearing memory space: \"" << sizeof(T) << " \"bytes.");
 					m_allocSpace.erase((m_allocSpace.begin() + ptr->m_allocationID));
 					delete ptr;
 				});

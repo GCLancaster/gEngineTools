@@ -62,8 +62,8 @@ namespace GENG
 			void SetReload(bool reload) { m_bReload = reload; }
 			std::string GetFilepath() const { return m_filepath; }
 
-			void LoadFile(const std::string filepath);
-			void EvaluateFile();
+			bool LoadFile(const std::string filepath);
+			bool EvaluateFile();
 
 			template<typename T>
 			void RegisterClass()

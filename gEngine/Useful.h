@@ -126,7 +126,27 @@ namespace GENG
 	//	}
 	//};
 	
+	template<typename T>
+	T fixedLength(const int & value, int digits = 3) 
+	{
+		unsigned int uvalue = (value < 0) ? -value : value;
+		if (value < 0)
+			digits--;
+		T result;
+		while (digits-- > 0) 
+		{
+			result += ('0' + uvalue % 10);
+			uvalue /= 10;
+		}
+		if (value < 0) {
+			result += '-';
+		}
+		std::reverse(result.begin(), result.end());
+		return result;
+	}
 
+	template <typename T> 
+	T clamp(const T& n, const T& lower, const T& upper) { return std::max(lower, std::min(n, upper)); }
 
 	//////////////////////////////////////////////////////////////////////////
 

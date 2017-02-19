@@ -24,14 +24,19 @@ GENG::Scripting::ScriptState::~ScriptState()
 
 }
 
-void GENG::Scripting::ScriptState::LoadFile(const std::string filepath)
+bool GENG::Scripting::ScriptState::LoadFile(const std::string filepath)
 {
 	m_filepath = filepath;
-	GENG::FileHandling::SGetFileString(filepath, m_file);
+	if(!GENG::FileHandling::SGetFileString(filepath, m_file))
+	{
+		LOG("Failed to load : " << m_filepath);
+		return false;
+	}
 	LOG("Loaded : " << m_filepath);
+	return true;
 }
 
-void GENG::Scripting::ScriptState::EvaluateFile()
+bool GENG::Scripting::ScriptState::EvaluateFile()
 {
 	if (m_bReload)
 	{
@@ -49,6 +54,7 @@ void GENG::Scripting::ScriptState::EvaluateFile()
 		LOG("Chaiscript exception: " << std::string(e.what()));
 		LoadFile(m_filepath);
 	}
+	return true;
 }
 
 void GENG::Scripting::ScriptState::DisplayDebugData()
