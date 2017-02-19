@@ -20,6 +20,7 @@
 #include <typeindex>
 #include <iosfwd>
 #include <initializer_list>
+#include "Carcassonne.h"
 #include <chrono>
 
 #undef main
