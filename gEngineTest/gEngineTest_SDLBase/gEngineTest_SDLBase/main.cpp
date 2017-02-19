@@ -20,6 +20,7 @@
 #include <typeindex>
 #include <iosfwd>
 #include <initializer_list>
+#include <chrono>
 
 #undef main
 
@@ -105,9 +106,9 @@ void TestComponentStructure()
 void TestFileHandling()
 {
 #ifdef TEST_FILEHANDLING
-	auto string1 = R"(F:\Videos\Films\Foodfight![2012].mp4)";
-	auto string2 = R"(F:\Program Files (x86)\Games\WildStar\Patch\ClientData.archive)";
-	auto string3 = R"(F:\Pictures\512_bmp_MildlyLoco.bmp)";
+	auto string1 = R"(E:\Videos\Films\Foodfight![2012].mp4)";
+	auto string2 = R"(D:\Program Files\Cloud Imperium Games\StarCitizen\Public\Data\Objects-part0.pak)";
+	auto string3 = R"(E:\Pictures\512_bmp_MildlyLoco.bmp)";
 
 	//std::string data1;
 	//std::vector<uint8_t> data2;
@@ -317,180 +318,57 @@ class CDIB_RGBA
 	}
 };
 
-//////////////////////////////////////////////////////////////////////////
-// Carcassonne
-namespace Carcassonne
-{
-	enum EdgeType
-	{
-		ctFarm,
-		ctCity,
-		ctRoad,
-		ctMonk,
-
-		ctCOUNT,
-		ctNULL
-	};
-	enum EdgeSide
-	{
-		csTop,
-		csLeft,
-		csBottom,
-		csRight,
-
-		csCOUNT,
-		csNULL
-	};
-	class Edge
-	{
-	private:
-		EdgeType m_type = ctNULL;
-
-	public:
-		std::wstring RenderSingle() const
-		{
-			switch (m_type)
-			{
-			case ctFarm:
-				return L"F";
-				break;
-			case ctCity:
-				return L"C";
-				break;
-			case ctRoad:
-				return L"R";
-				break;
-			case ctMonk:
-				return L"M";
-				break;
-			case ctCOUNT:
-			case ctNULL:
-			default:
-				return L"-";
-				break;
-			}
-		}
-
-		Edge(){};
-		Edge(const EdgeType & type) : m_type(type) {};
-	};
-	class Tile
-	{
-	private:
-		Edge m_edges[csCOUNT];
-		Edge m_center;
-
-		Tile * m_pEdgeTiles[csCOUNT];
-
-	public:
-		Tile(){};
-		Tile(std::initializer_list<EdgeType> edges)
-		{
-			if (edges.size() == csCOUNT)
-			{
-				memcpy(&m_edges[0], edges.begin(), (sizeof(EdgeType) * csCOUNT));
-			}
-			else if (edges.size() == csCOUNT + 1)
-			{
-				memcpy(&m_edges[0], edges.begin(), (sizeof(EdgeType) * csCOUNT));
-				m_center = *(edges.begin() + (csCOUNT + 1));
-			}
-			else
-			{
-				DERROR("Invalid number of tiles!");
-			}
-		}
-
-		auto RenderSingle() const -> decltype(m_center.RenderSingle())
-		{		
-			using sstringType = decltype(m_center.RenderSingle());
-			sstringType text = L"";
-
-			// ###[-]###
-			// [-][-][-]
-			// ###[-]###
-			auto topLeft = L'\u250F';
-			auto topRight = L'\u2523';
-			auto bottomLeft = L'\u2517';
-			auto bottomRight = L'\u251B';
-
-			// Top row
-			text += topLeft;
-			text += m_edges[csTop].RenderSingle();
-			text += topRight;
-
-			// Mid row
-			text += m_edges[csLeft].RenderSingle();
-			text += m_center.RenderSingle();
-			text += m_edges[csRight].RenderSingle();
-
-			text += bottomLeft;
-			text += m_edges[csBottom].RenderSingle();
-			text += bottomRight;
-
-			return text;
-		}
-		auto Render() const -> decltype(RenderSingle())
-		{
-			using sstringType = decltype(RenderSingle());
-			sstringType text = L"";
-
-			text += RenderSingle();
-
-			if (m_pEdgeTiles[csTop] != nullptr) { text += m_pEdgeTiles[csTop]->RenderSingle(); }
-			if (m_pEdgeTiles[csLeft] != nullptr) { text += m_pEdgeTiles[csLeft]->RenderSingle(); }
-			if (m_pEdgeTiles[csBottom] != nullptr) { text += m_pEdgeTiles[csBottom]->RenderSingle(); }
-			if (m_pEdgeTiles[csRight] != nullptr) { text += m_pEdgeTiles[csRight]->RenderSingle(); }
-
-			return text;
-		}
-		Tile * SetSide(const EdgeSide & side, Tile * pTile)
-		{
-			if (m_pEdgeTiles[side] != nullptr)
-				DERROR("Cannot place tile!");
-			m_pEdgeTiles[side] = pTile;
-			return m_pEdgeTiles[side];
-		}
-	};
-	class Board
-	{
-		static const size_t NUM_TILES = 60;
-
-		size_t m_poolPos = NUM_TILES - 1;
-		std::array<Tile, NUM_TILES> m_tilePool;
-		
-	public:
-		Board()
-		{
-			m_tilePool[NUM_TILES - 1] = { EdgeType::ctRoad, EdgeType::ctFarm, EdgeType::ctCity, EdgeType::ctFarm };
-		}
-
-		Tile * GetTopOfStack() { return &m_tilePool[--m_poolPos]; }
-		Tile * GetStartTile() { return &m_tilePool[NUM_TILES - 1]; };
-
-		auto Render() const -> decltype(m_tilePool[NUM_TILES - 1].Render())
-		{
-			return m_tilePool[NUM_TILES - 1].Render();
-		}
-	};
-};
-
 int main(int argc, char* args[])
 {
 	Init();
+	std::srand(1002);
 
 	Carcassonne::Board m_board;
-	auto s = m_board.GetStartTile();
-	LOG(m_board.Render());
 
-	auto s_l = s->SetSide(Carcassonne::EdgeSide::csLeft, m_board.GetTopOfStack());
-	auto s_b = s->SetSide(Carcassonne::EdgeSide::csBottom, m_board.GetTopOfStack());
-	auto s_r = s->SetSide(Carcassonne::EdgeSide::csRight, m_board.GetTopOfStack());
-
-	s_l->SetSide(Carcassonne::EdgeSide::csTop, m_board.GetTopOfStack());
-
-	LOG(m_board.Render());
+	auto pNextTile = m_board.GetTopOfStack();
+	Carcassonne::TilePosition nextPosition = m_board.GetStartTile()->GetPos();
+	while (pNextTile != nullptr)
+	{
+		while (pNextTile != nullptr)
+		{
+			if (m_board.AttemptToPlaceTileAroundPosition(nextPosition, pNextTile))
+			{
+				nextPosition = pNextTile->GetPos();
+				break;
+			}
+			else
+			{
+				//const auto randPick = (std::rand() % 2 == 1);
+				const auto placedTiles = m_board.GetPlacedTiles();
+				if (placedTiles.size() > 0 /*&& randPick*/)
+				{
+					nextPosition = m_board.GetTile(placedTiles[std::rand() % placedTiles.size()])->GetPos();
+					break;
+				}
+				else
+				{
+					nextPosition = m_board.GetRandomPosition();
+					break;
+				}
+			}
+		}
+		pNextTile = m_board.GetTopOfStack();
 		
+		if (m_board.GetIsFinished())
+			break;
+	}
+
+#include <windows.h>
+	auto TextCharGotoXY = [](int x, int y)
+	{
+		COORD coord;
+		coord.X = x;
+		coord.Y = y;
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+	};
+
+	m_board.Render();
+
 	//TestComponentStructure();
 
 	//TestFileHandling();

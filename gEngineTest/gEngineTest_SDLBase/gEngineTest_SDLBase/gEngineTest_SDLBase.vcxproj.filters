@@ -57,6 +57,9 @@
     <ClCompile Include="..\..\..\gEngine\System\Scripting\gScriptingState.cpp">
       <Filter>gEngine\Scripting</Filter>
     </ClCompile>
+    <ClCompile Include="Carcassonne.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\gEngine\Useful.h">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\gEngine\System\Resources\gResourcesUseful.h">
       <Filter>gEngine\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Carcassonne.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

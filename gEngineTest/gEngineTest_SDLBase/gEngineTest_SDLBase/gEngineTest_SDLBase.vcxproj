@@ -71,12 +71,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>F:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\include;E:\My Documents\GitHub\CustomLibraries\ChaiScript-5.7.1\include;E:\My Documents\GitHub\gEngineTools;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LIB_SDL;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>F:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -85,13 +85,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>F:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\include;F:\My Documents\GitHub\CustomLibraries\ChaiScript-5.7.1\include;F:\My Documents\GitHub\gEngineTools;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\include;E:\My Documents\GitHub\CustomLibraries\ChaiScript-5.7.1\include;E:\My Documents\GitHub\gEngineTools;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LIB_SDL;LIB_CHAISCRIPT;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>F:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\lib\x64;F:\My Documents\GitHub\CustomLibraries\ChaiScript-5.7.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\lib\x64;E:\My Documents\GitHub\CustomLibraries\ChaiScript-5.7.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -102,14 +102,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>F:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\include;E:\My Documents\GitHub\CustomLibraries\ChaiScript-5.7.1\include;E:\My Documents\GitHub\gEngineTools;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LIB_SDL;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>F:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -120,7 +120,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>F:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\include;F:\My Documents\GitHub\CustomLibraries\ChaiScript-5.7.1\include;F:\My Documents\GitHub\gEngineTools;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\include;E:\My Documents\GitHub\CustomLibraries\ChaiScript-5.7.1\include;E:\My Documents\GitHub\gEngineTools;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LIB_SDL;LIB_CHAISCRIPT;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -128,7 +128,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>F:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\lib\x64;F:\My Documents\GitHub\CustomLibraries\ChaiScript-5.7.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\My Documents\GitHub\CustomLibraries\SDL2-2.0.3\lib\x64;E:\My Documents\GitHub\CustomLibraries\ChaiScript-5.7.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -138,6 +138,7 @@
     <ClCompile Include="..\..\..\gEngine\System\Scripting\gScriptingState.cpp" />
     <ClCompile Include="..\..\..\gEngine\System\Threads\gProcessThreadPool.cpp" />
     <ClCompile Include="..\..\..\gEngine\System\Threads\gTaskThreadPool.cpp" />
+    <ClCompile Include="Carcassonne.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +160,7 @@
     <ClInclude Include="..\..\..\gEngine\System\Threads\gProcessThreadPool.h" />
     <ClInclude Include="..\..\..\gEngine\System\Threads\gTaskThreadPool.h" />
     <ClInclude Include="..\..\..\gEngine\Useful.h" />
+    <ClInclude Include="Carcassonne.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\gEngine\System\Threads\UsefulThreads.h" />
